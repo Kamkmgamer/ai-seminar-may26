@@ -1,0 +1,64 @@
+# OpenCode hands-on
+
+OpenCode is the hands-on AI coding agent for this workshop. It can run in the terminal, inspect a project, suggest changes, and help you build.
+
+## What OpenCode is
+
+OpenCode is an open source AI coding agent. The official docs describe it as available through a terminal interface, desktop app, or IDE extension.
+
+In this workshop, we care about the terminal workflow because it teaches the most transferable skill: talking to an agent while watching the files and commands it touches.
+
+## Install OpenCode
+
+Check the official docs before installing because commands can change:
+
+https://opencode.ai/docs
+
+The docs currently list multiple install paths, including install script, npm, package managers, Windows options, and binaries. Use the path that fits your machine and your instructor's guidance.
+
+For npm-based installation, the official docs list:
+
+```powershell
+npm install -g opencode-ai
+```
+
+## Start OpenCode in a project
+
+Move into your project folder first:
+
+```powershell
+cd ai-workshop
+```
+
+Then start OpenCode:
+
+```powershell
+opencode
+```
+
+## First prompt
+
+Start with a question, not a command:
+
+```text
+Explain what files are in this project. Do not change anything yet.
+```
+
+This teaches the agent to inspect before acting.
+
+## Good beginner prompts
+
+- "Make a plan before editing files."
+- "Explain every command before running it."
+- "Show me the diff and wait for my approval."
+- "If you need an API key, stop and tell me where it should be stored."
+
+## Safety checkpoint
+
+OpenCode can be powerful. Treat it like a developer with terminal access. Let it help, but do not let it blindly decide.
+
+Never paste secrets into prompts. Never ask an agent to store API keys in source files.
+
+## Official references
+
+- OpenCode docs: https://opencode.ai/docs

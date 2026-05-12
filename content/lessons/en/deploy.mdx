@@ -1,0 +1,57 @@
+# Deploy your site
+
+Deployment means putting your website on the internet so other people can open it with a link.
+
+## Choose one hosting path
+
+For this workshop, choose one guide. Do not try to deploy to every provider during the live session.
+
+Recommended for Next.js projects:
+
+- Vercel.
+
+Useful alternatives:
+
+- Netlify.
+- GitHub Pages, only when the project is static-compatible.
+
+## Vercel path
+
+Vercel's Git deployment docs explain that it can create automatic deployments from GitHub, GitLab, Bitbucket, and Azure DevOps.
+
+Basic flow:
+
+1. Push your project to GitHub.
+2. Go to Vercel.
+3. Create a new project.
+4. Import the Git repository.
+5. Check the project settings.
+6. Deploy.
+
+## Environment variables
+
+If your project needs secrets, do not put them in the code. Add them in the hosting provider's environment variable settings.
+
+For the beginner portfolio, try to avoid secrets entirely.
+
+## Deployment checklist
+
+- The project runs locally.
+- The code is on GitHub.
+- No secrets are committed.
+- The hosting provider is connected to the correct repository.
+- The deployed URL opens in a private/incognito browser window.
+
+## What if deployment fails?
+
+Read the error message slowly. Ask the AI agent:
+
+```text
+Explain this deployment error. Do not guess. Tell me what file or setting I should check first.
+```
+
+## Official references
+
+- Vercel Git deployments: https://vercel.com/docs/git
+- Netlify docs: https://docs.netlify.com/
+- GitHub Pages docs: https://docs.github.com/en/pages

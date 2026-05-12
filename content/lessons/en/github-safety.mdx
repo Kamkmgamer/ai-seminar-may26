@@ -1,0 +1,72 @@
+# GitHub and secrets safety
+
+GitHub is where your code lives. That makes it useful, but also public if you choose a public repository. This lesson is about publishing without leaking private information.
+
+## Create a GitHub account
+
+GitHub's official docs say you need a personal account and a verified email address to get started.
+
+Go to GitHub and sign up:
+
+https://github.com/
+
+Official guide:
+
+https://docs.github.com/en/get-started/start-your-journey/creating-an-account-on-github
+
+## The secret rule
+
+Never commit secrets. Secrets include:
+
+- API keys.
+- Telegram bot tokens.
+- Passwords.
+- `.env` files.
+- Private URLs that contain tokens.
+
+## Check before committing
+
+Always run:
+
+```powershell
+git status
+```
+
+This shows what Git is about to track.
+
+If you see `.env`, `.env.local`, or anything that looks private, stop.
+
+## Use `.gitignore`
+
+Your project should include a `.gitignore` file. It tells Git which files to ignore.
+
+Make sure environment files are ignored:
+
+```text
+.env
+.env.local
+.env.*
+```
+
+## If you leak a secret
+
+Deleting the file later is not enough. Git history may still contain it.
+
+Do this instead:
+
+1. Revoke or rotate the exposed key in the provider dashboard.
+2. Remove the secret from the project.
+3. Ask for help before pushing again.
+
+## Publishing checklist
+
+- I ran `git status`.
+- I checked that no `.env` files are staged.
+- I checked that no API keys appear in code.
+- I understand whether my repository is public or private.
+- I know how to rotate a key if I accidentally expose it.
+
+## Official references
+
+- GitHub account guide: https://docs.github.com/en/get-started/start-your-journey/creating-an-account-on-github
+- GitHub two-factor authentication: https://docs.github.com/en/authentication/securing-your-account-with-two-factor-authentication-2fa/configuring-two-factor-authentication

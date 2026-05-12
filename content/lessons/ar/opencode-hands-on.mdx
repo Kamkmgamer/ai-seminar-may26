@@ -1,0 +1,64 @@
+# تجربة OpenCode عملية
+
+OpenCode هو AI coding agent الأساسي في الورشة. بقدر يشتغل في التيرمنال، يقرأ المشروع، يقترح تغييرات، ويساعدك تبني.
+
+## OpenCode هو شنو؟
+
+OpenCode أداة open source كـ AI coding agent. الوثائق الرسمية بتقول إنه متاح كتيرمنال، desktop app، أو IDE extension.
+
+في الورشة دي بنهتم بالترمنال لأنه بعلمك مهارة بتفيدك في أي مكان: تكلم agent وانت شايف الملفات والأوامر البيلمسها.
+
+## ثبت OpenCode
+
+راجع الوثائق الرسمية قبل التثبيت لأن الأوامر ممكن تتغير:
+
+https://opencode.ai/docs
+
+الوثائق حالياً بتذكر طرق تثبيت متعددة، منها install script و npm و package managers وخيارات ويندوز و binaries. استخدم الطريقة المناسبة لجهازك وتوجيه المدرب.
+
+للتثبيت عبر npm، الوثائق الرسمية بتذكر:
+
+```powershell
+npm install -g opencode-ai
+```
+
+## شغل OpenCode داخل مشروع
+
+أولاً ادخل فولدر المشروع:
+
+```powershell
+cd ai-workshop
+```
+
+بعدها شغل OpenCode:
+
+```powershell
+opencode
+```
+
+## أول prompt
+
+ابدأ بسؤال، ما بأمر تعديل:
+
+```text
+Explain what files are in this project. Do not change anything yet.
+```
+
+ده بعلم الـ agent يقرأ قبل ما يغير.
+
+## Prompts كويسة للمبتدئين
+
+- "Make a plan before editing files."
+- "Explain every command before running it."
+- "Show me the diff and wait for my approval."
+- "If you need an API key, stop and tell me where it should be stored."
+
+## نقطة أمان
+
+OpenCode قوي. اتعامل معاه زي developer عنده terminal access. خليه يساعدك، لكن ما تخليه يقرر ساكت.
+
+ما تلصق أسرار في prompts. وما تطلب من agent يحفظ API keys داخل ملفات الكود.
+
+## مراجع رسمية
+
+- OpenCode docs: https://opencode.ai/docs

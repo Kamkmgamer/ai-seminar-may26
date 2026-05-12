@@ -26,8 +26,8 @@ export const lessons: Lesson[] = [
     status: "ready",
     minutes: 8,
     title: {
-      en: "Welcome to the AI agent workshop",
-      ar: "مرحب بيك في ورشة وكلاء الذكاء الاصطناعي",
+      en: "Welcome to AI in 2026",
+      ar: "مرحب بيك في AI سنة 2026",
     },
     summary: {
       en: "Understand why AI changed so quickly and what students should learn first.",
@@ -49,7 +49,7 @@ export const lessons: Lesson[] = [
   },
   {
     slug: "windows-setup",
-    status: "planned",
+    status: "ready",
     minutes: 18,
     title: {
       en: "Windows setup path",
@@ -62,7 +62,7 @@ export const lessons: Lesson[] = [
   },
   {
     slug: "node-npm",
-    status: "planned",
+    status: "ready",
     minutes: 16,
     title: {
       en: "Node and npm",
@@ -75,7 +75,7 @@ export const lessons: Lesson[] = [
   },
   {
     slug: "opencode-hands-on",
-    status: "planned",
+    status: "ready",
     minutes: 22,
     title: {
       en: "OpenCode hands-on",
@@ -88,7 +88,7 @@ export const lessons: Lesson[] = [
   },
   {
     slug: "portfolio",
-    status: "planned",
+    status: "ready",
     minutes: 35,
     title: {
       en: "Build your portfolio",
@@ -101,7 +101,7 @@ export const lessons: Lesson[] = [
   },
   {
     slug: "github-safety",
-    status: "planned",
+    status: "ready",
     minutes: 20,
     title: {
       en: "GitHub and secrets safety",
@@ -114,7 +114,7 @@ export const lessons: Lesson[] = [
   },
   {
     slug: "deploy",
-    status: "planned",
+    status: "ready",
     minutes: 20,
     title: {
       en: "Deploy your site",

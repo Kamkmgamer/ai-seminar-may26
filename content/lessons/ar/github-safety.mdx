@@ -1,0 +1,72 @@
+# GitHub وحماية الأسرار
+
+GitHub هو المكان البعيش فيه الكود. ده مفيد، لكن ممكن يكون عام لو اخترت repository عام. الدرس ده عن النشر من غير تسريب معلومات خاصة.
+
+## اعمل حساب GitHub
+
+وثائق GitHub الرسمية بتقول إنك محتاج personal account و email مؤكد عشان تبدأ.
+
+افتح GitHub وسجل:
+
+https://github.com/
+
+الدليل الرسمي:
+
+https://docs.github.com/en/get-started/start-your-journey/creating-an-account-on-github
+
+## قاعدة الأسرار
+
+ما تعمل commit للأسرار. الأسرار تشمل:
+
+- API keys.
+- Telegram bot tokens.
+- كلمات السر.
+- ملفات `.env`.
+- روابط خاصة فيها tokens.
+
+## افحص قبل commit
+
+دايماً شغل:
+
+```powershell
+git status
+```
+
+ده بوريك Git شايف شنو وحيتتبع شنو.
+
+لو شفت `.env` أو `.env.local` أو أي حاجة شكلها خاصة، وقف.
+
+## استخدم `.gitignore`
+
+المشروع مفروض يكون فيه ملف `.gitignore`. ده بقول لـ Git يتجاهل ملفات معينة.
+
+اتأكد إن ملفات البيئة متجاهلة:
+
+```text
+.env
+.env.local
+.env.*
+```
+
+## لو سربت secret
+
+مسح الملف بعدين ما كفاية. Git history ممكن يكون لسه شايله.
+
+اعمل الآتي:
+
+1. اعمل revoke أو rotate للمفتاح من لوحة تحكم المزود.
+2. شيل السر من المشروع.
+3. اطلب مساعدة قبل ما تعمل push تاني.
+
+## Checklist النشر
+
+- شغلت `git status`.
+- اتأكدت إن ما في `.env` files staged.
+- اتأكدت إن ما في API keys في الكود.
+- فاهم الـ repository عام ولا خاص.
+- عارف كيف تعمل rotate لو مفتاح اتسرب.
+
+## مراجع رسمية
+
+- GitHub account guide: https://docs.github.com/en/get-started/start-your-journey/creating-an-account-on-github
+- GitHub two-factor authentication: https://docs.github.com/en/authentication/securing-your-account-with-two-factor-authentication-2fa/configuring-two-factor-authentication
