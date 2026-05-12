@@ -33,6 +33,7 @@ const copy = {
       "No prior coding required. In one workshop you'll set up your machine, learn how AI agents really work, and ship a small portfolio site you can show off.",
     primary: "Start the guide",
     secondary: "What is an agent?",
+    catalog: "Compare agent tools",
     statOne: { v: "0", l: "lines of code required to start" },
     statTwo: { v: "8", l: "lessons, English + Arabic" },
     statThree: { v: "1", l: "deployed site you keep" },
@@ -130,6 +131,7 @@ const copy = {
       "ما محتاج تعرف برمجة. في ورشة واحدة بتجهز لابتوبك، بتفهم الـ agents بصورة حقيقية، وبتطلع بموقع بورتفوليو صغير بتقدر تعرضه لأي زول.",
     primary: "ابدأ الدليل",
     secondary: "شنو الـagent؟",
+    catalog: "قارن أدوات الـ agents",
     statOne: { v: "0", l: "سطر كود مطلوب في البداية" },
     statTwo: { v: "8", l: "دروس، إنجليزي + عربي" },
     statThree: { v: "1", l: "موقع منشور يخصك" },
@@ -373,6 +375,12 @@ export default async function LocaleHome({
                 className="text-sm underline decoration-muted-foreground/40 decoration-1 underline-offset-[6px] hover:decoration-foreground"
               >
                 {text.secondary}
+              </Link>
+              <Link
+                href={`/${locale}/agents`}
+                className="text-sm underline decoration-muted-foreground/40 decoration-1 underline-offset-[6px] hover:decoration-foreground"
+              >
+                {text.catalog}
               </Link>
             </div>
             <div className="mt-2 grid max-w-xl grid-cols-3 gap-x-8">

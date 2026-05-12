@@ -22,6 +22,7 @@ const copy = {
     brand: "AI in 2026",
     eyebrow: "Student field guide",
     progress: "Learning map preview",
+    agents: "Agents",
     lessonOf: (n: number, total: number) =>
       `Lesson ${String(n).padStart(2, "0")} of ${String(total).padStart(2, "0")}`,
   },
@@ -29,6 +30,7 @@ const copy = {
     brand: "الذكاء الاصطناعي في 2026",
     eyebrow: "دليل عملي للطلاب",
     progress: "معاينة خريطة التعلم",
+    agents: "الوكلاء",
     lessonOf: (n: number, total: number) =>
       `الدرس ${String(n).padStart(2, "0")} من ${String(total).padStart(2, "0")}`,
   },
@@ -49,6 +51,12 @@ export function CourseShell({ locale, activeSlug, children }: CourseShellProps) 
             </span>
           </Link>
           <div className="flex items-center gap-2">
+            <Link
+              href={`/${locale}/agents`}
+              className="hidden rounded-md px-2.5 py-1.5 text-sm font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-foreground md:inline-flex"
+            >
+              {text.agents}
+            </Link>
             <LanguageSwitcher locale={locale} slug={activeSlug} />
             <ThemeToggle />
           </div>
