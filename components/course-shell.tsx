@@ -3,7 +3,13 @@ import Link from "next/link";
 import { LanguageSwitcher } from "@/components/language-switcher";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { Progress, ProgressLabel, ProgressValue } from "@/components/ui/progress";
-import { lessons, readyLessons, type Locale } from "@/lib/course";
+import {
+  getChapterLabel,
+  getLessonPosition,
+  lessons,
+  readyLessons,
+  type Locale,
+} from "@/lib/course";
 
 type CourseShellProps = {
   locale: Locale;
@@ -16,21 +22,25 @@ const copy = {
     brand: "AI in 2026",
     eyebrow: "Student field guide",
     progress: "Learning map preview",
+    lessonOf: (n: number, total: number) =>
+      `Lesson ${String(n).padStart(2, "0")} of ${String(total).padStart(2, "0")}`,
   },
   ar: {
     brand: "الذكاء الاصطناعي في 2026",
     eyebrow: "دليل عملي للطلاب",
     progress: "معاينة خريطة التعلم",
+    lessonOf: (n: number, total: number) =>
+      `الدرس ${String(n).padStart(2, "0")} من ${String(total).padStart(2, "0")}`,
   },
-} satisfies Record<Locale, Record<string, string>>;
+} satisfies Record<Locale, Record<string, unknown>>;
 
 export function CourseShell({ locale, activeSlug, children }: CourseShellProps) {
   const text = copy[locale];
-  const completion = Math.round((readyLessons.length / lessons.length) * 100);
+  const lessonMode = Boolean(activeSlug);
 
   return (
     <div className="min-h-screen text-foreground">
-      <header className="sticky top-0 z-10 bg-background/85 backdrop-blur supports-[backdrop-filter]:bg-background/75 dark:bg-background/90 dark:supports-[backdrop-filter]:bg-background/80">
+      <header className="sticky top-0 z-20 bg-background/85 backdrop-blur supports-[backdrop-filter]:bg-background/75 dark:bg-background/90 dark:supports-[backdrop-filter]:bg-background/80">
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-6 py-5">
           <Link href={`/${locale}`} className="group flex items-baseline gap-3">
             <span className="text-lg font-semibold tracking-tight">{text.brand}</span>
@@ -43,19 +53,74 @@ export function CourseShell({ locale, activeSlug, children }: CourseShellProps) 
             <ThemeToggle />
           </div>
         </div>
+        {lessonMode && activeSlug ? (
+          <LessonProgressStrip locale={locale} activeSlug={activeSlug} />
+        ) : null}
       </header>
 
-      <main className="mx-auto w-full max-w-6xl px-6 py-12">
-        <div className="mb-14 max-w-md">
-          <Progress value={completion}>
-            <ProgressLabel className="text-[11px] uppercase tracking-[0.22em] text-muted-foreground">
-              {text.progress}
-            </ProgressLabel>
-            <ProgressValue />
-          </Progress>
-        </div>
+      <main className="mx-auto w-full max-w-6xl px-6 pb-20 pt-10 md:pt-12">
+        {!lessonMode ? (
+          <div className="mb-14 max-w-md">
+            <Progress value={Math.round((readyLessons.length / lessons.length) * 100)}>
+              <ProgressLabel className="text-[11px] uppercase tracking-[0.22em] text-muted-foreground">
+                {text.progress}
+              </ProgressLabel>
+              <ProgressValue />
+            </Progress>
+          </div>
+        ) : null}
         {children}
       </main>
+    </div>
+  );
+}
+
+function LessonProgressStrip({
+  locale,
+  activeSlug,
+}: {
+  locale: Locale;
+  activeSlug: string;
+}) {
+  const { index, total } = getLessonPosition(activeSlug);
+  if (index === -1) return null;
+
+  const text = copy[locale];
+  const chapter = getChapterLabel(activeSlug, locale);
+  const current = index + 1;
+
+  return (
+    <div className="border-t border-dashed border-foreground/15">
+      <div className="mx-auto flex max-w-6xl items-center gap-4 px-6 py-3 text-[11px] uppercase tracking-[0.22em] text-muted-foreground">
+        <span className="font-mono tabular-nums">{text.lessonOf(current, total)}</span>
+        {chapter ? (
+          <>
+            <span aria-hidden className="h-px w-6 bg-foreground/20" />
+            <span className="text-foreground/70">{chapter}</span>
+          </>
+        ) : null}
+        <ol
+          aria-hidden
+          className="ms-auto flex items-center gap-1"
+        >
+          {readyLessons.map((lesson, i) => {
+            const state =
+              i < index ? "done" : i === index ? "current" : "upcoming";
+            return (
+              <li
+                key={lesson.slug}
+                className={
+                  state === "done"
+                    ? "h-[3px] w-5 rounded-full bg-foreground/55"
+                    : state === "current"
+                      ? "h-[3px] w-8 rounded-full bg-[color:var(--chart-4)]"
+                      : "h-[3px] w-5 rounded-full bg-foreground/15"
+                }
+              />
+            );
+          })}
+        </ol>
+      </div>
     </div>
   );
 }

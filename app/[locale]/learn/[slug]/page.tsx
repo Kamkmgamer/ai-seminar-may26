@@ -1,25 +1,41 @@
-import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import { CourseShell } from "@/components/course-shell";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
+import { LessonFooterNav } from "@/components/lesson-footer-nav";
+import { LessonPathRail } from "@/components/lesson-path-rail";
 import {
+  getChapterLabel,
   getLesson,
+  getLessonPosition,
   getNextReadyLesson,
+  getPreviousReadyLesson,
   isLocale,
   readyLessons,
+  type Locale,
 } from "@/lib/course";
+import { loadLessonHeadings } from "@/lib/lesson-headings";
 import { loadLesson } from "@/lib/lesson-modules";
 
 export function generateStaticParams() {
   return ["en", "ar"].flatMap((locale) =>
-    readyLessons.map((lesson) => ({ locale, slug: lesson.slug }))
+    readyLessons.map((lesson) => ({ locale, slug: lesson.slug })),
   );
 }
 
 export const dynamicParams = false;
+
+const lessonCopy = {
+  en: {
+    chapter: (n: number, total: number) =>
+      `Chapter ${String(n).padStart(2, "0")} / ${String(total).padStart(2, "0")}`,
+    minutes: (m: number) => `${m} min read`,
+  },
+  ar: {
+    chapter: (n: number, total: number) =>
+      `الفصل ${String(n).padStart(2, "0")} / ${String(total).padStart(2, "0")}`,
+    minutes: (m: number) => `${m} دقيقة قراءة`,
+  },
+} satisfies Record<Locale, Record<string, unknown>>;
 
 export default async function LessonPage({
   params,
@@ -41,35 +57,63 @@ export default async function LessonPage({
 
   const LessonContent = lessonModule.default;
   const nextLesson = getNextReadyLesson(slug);
+  const previousLesson = getPreviousReadyLesson(slug);
+  const { index, total } = getLessonPosition(slug);
+  const headings = await loadLessonHeadings(locale, slug);
+  const text = lessonCopy[locale];
+  const chapter = getChapterLabel(slug, locale);
 
   return (
     <CourseShell locale={locale} activeSlug={slug}>
-      <article className="py-8 md:py-14">
-      <div className="mb-8 flex flex-wrap items-center gap-3">
-        <Badge variant="secondary">{lesson.minutes} min</Badge>
-        <Badge variant="outline">{lesson.status}</Badge>
-      </div>
-      <div className="max-w-3xl">
-        <LessonContent />
-      </div>
+      <div className="grid gap-12 lg:grid-cols-[13rem_1fr] lg:gap-x-16">
+        <LessonPathRail
+          locale={locale}
+          activeSlug={slug}
+          headings={headings}
+        />
 
-      <Separator className="my-10 max-w-3xl" />
+        <article className="min-w-0">
+          <header className="agent-step relative flex flex-col gap-5 border-b border-dashed border-foreground/20 pb-10">
+            <div className="flex items-center gap-3 text-xs uppercase tracking-[0.22em] text-muted-foreground">
+              <span aria-hidden className="h-px w-8 bg-current opacity-50" />
+              <span className="font-mono tabular-nums">
+                {text.chapter(index + 1, total)}
+              </span>
+              {chapter ? (
+                <>
+                  <span aria-hidden className="opacity-40">
+                    ·
+                  </span>
+                  <span>{chapter}</span>
+                </>
+              ) : null}
+            </div>
+            <h1 className="max-w-3xl text-[clamp(2rem,4.4vw,3.25rem)] font-semibold leading-[1.1] tracking-tight text-foreground">
+              {lesson.title[locale]}
+            </h1>
+            <p className="max-w-2xl text-lg leading-8 text-muted-foreground">
+              {lesson.summary[locale]}
+            </p>
+            <div className="mt-2 flex items-center gap-4 font-mono text-[11px] uppercase tracking-[0.22em] text-muted-foreground">
+              <span>{text.minutes(lesson.minutes)}</span>
+              <span aria-hidden className="h-px w-6 bg-foreground/20" />
+              <span className="tabular-nums">
+                {String(index + 1).padStart(2, "0")} / {String(total).padStart(2, "0")}
+              </span>
+            </div>
+          </header>
 
-      <div className="flex max-w-3xl flex-col gap-3 md:flex-row md:items-center md:justify-between">
-          <p className="text-sm text-muted-foreground">
-            This placeholder shell will later save checklist completion for signed-in students.
-          </p>
-          {nextLesson ? (
-            <Button render={<Link href={`/${locale}/learn/${nextLesson.slug}`} />}>
-              Next lesson
-            </Button>
-          ) : (
-            <Button render={<Link href={`/${locale}`} />} variant="outline">
-              Back to course
-            </Button>
-          )}
+          <div className="mdx-body max-w-3xl pt-10">
+            <LessonContent />
+          </div>
+
+          <LessonFooterNav
+            locale={locale}
+            previous={previousLesson}
+            next={nextLesson}
+          />
+        </article>
       </div>
-      </article>
     </CourseShell>
   );
 }

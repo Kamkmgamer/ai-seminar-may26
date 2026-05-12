@@ -18,6 +18,7 @@ export function LanguageSwitcher({ locale, slug }: LanguageSwitcherProps) {
           <Button
             key={item}
             render={<Link href={href} />}
+            nativeButton={false}
             variant={item === locale ? "default" : "outline"}
             size="sm"
           >

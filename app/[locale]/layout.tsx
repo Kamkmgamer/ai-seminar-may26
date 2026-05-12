@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 
+import { Toaster } from "@/components/toaster";
 import { isLocale, localeDirections } from "@/lib/course";
 
 export function generateStaticParams() {
@@ -22,6 +23,7 @@ export default async function LocaleLayout({
   return (
     <div lang={locale} dir={localeDirections[locale]}>
       {children}
+      <Toaster />
     </div>
   );
 }

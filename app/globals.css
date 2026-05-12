@@ -3,6 +3,7 @@
 @import "shadcn/tailwind.css";
 
 @custom-variant dark (&:is(.dark *));
+@custom-variant rtl (&:where([dir="rtl"], [dir="rtl"] *));
 
 @theme inline {
   --color-background: var(--background);
@@ -327,6 +328,17 @@
   stroke-dashoffset: 600;
   animation: hand-draw 1.6s cubic-bezier(0.22, 1, 0.36, 1) 0.4s forwards;
   opacity: 0.85;
+}
+
+@keyframes toast-rise {
+  0% {
+    opacity: 0;
+    transform: translateY(8px) scale(0.98);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

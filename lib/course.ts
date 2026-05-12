@@ -141,3 +141,40 @@ export function getNextReadyLesson(slug: string) {
   const index = readyLessons.findIndex((lesson) => lesson.slug === slug);
   return readyLessons[index + 1];
 }
+
+export function getPreviousReadyLesson(slug: string) {
+  const index = readyLessons.findIndex((lesson) => lesson.slug === slug);
+  return index > 0 ? readyLessons[index - 1] : undefined;
+}
+
+export function getLessonPosition(slug: string) {
+  const index = readyLessons.findIndex((lesson) => lesson.slug === slug);
+  return { index, total: readyLessons.length };
+}
+
+const chapterCopy: Record<Locale, Record<string, string>> = {
+  en: {
+    welcome: "Orientation",
+    agents: "Foundation",
+    "windows-setup": "Setup",
+    "node-npm": "Setup",
+    "opencode-hands-on": "Practice",
+    portfolio: "Build",
+    "github-safety": "Safety",
+    deploy: "Ship",
+  },
+  ar: {
+    welcome: "البداية",
+    agents: "الأساس",
+    "windows-setup": "التجهيز",
+    "node-npm": "التجهيز",
+    "opencode-hands-on": "تطبيق",
+    portfolio: "البناء",
+    "github-safety": "الأمان",
+    deploy: "النشر",
+  },
+};
+
+export function getChapterLabel(slug: string, locale: Locale) {
+  return chapterCopy[locale][slug] ?? "";
+}

@@ -365,7 +365,7 @@ export default async function LocaleHome({
               {text.intro}
             </p>
             <div className="flex flex-wrap items-center gap-5">
-              <Button render={<Link href={`/${locale}/learn/welcome`} />} size="lg">
+              <Button render={<Link href={`/${locale}/learn/welcome`} />} nativeButton={false} size="lg">
                 {text.primary} →
               </Button>
               <Link
