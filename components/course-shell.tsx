@@ -29,26 +29,28 @@ export function CourseShell({ locale, activeSlug, children }: CourseShellProps) 
   const completion = Math.round((readyLessons.length / lessons.length) * 100);
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
-      <header className="sticky top-0 z-10 bg-background/92 backdrop-blur supports-[backdrop-filter]:bg-background/76">
-        <div className="mx-auto flex max-w-5xl flex-col gap-4 px-4 py-4 md:flex-row md:items-center md:justify-between md:px-6">
-          <Link href={`/${locale}`} className="flex flex-col gap-1">
-            <span className="text-xs font-medium uppercase tracking-[0.2em] text-muted-foreground">
-              {text.eyebrow}
+    <div className="min-h-screen text-foreground">
+      <header className="sticky top-0 z-10 bg-background/85 backdrop-blur supports-[backdrop-filter]:bg-background/75 dark:bg-background/90 dark:supports-[backdrop-filter]:bg-background/80">
+        <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-6 py-5">
+          <Link href={`/${locale}`} className="group flex items-baseline gap-3">
+            <span className="text-lg font-semibold tracking-tight">{text.brand}</span>
+            <span className="hidden text-[11px] uppercase tracking-[0.22em] text-muted-foreground md:inline">
+              · {text.eyebrow}
             </span>
-            <span className="text-2xl font-semibold tracking-tight">{text.brand}</span>
           </Link>
-          <div className="flex flex-wrap items-center gap-2">
+          <div className="flex items-center gap-2">
             <LanguageSwitcher locale={locale} slug={activeSlug} />
             <ThemeToggle />
           </div>
         </div>
       </header>
 
-      <main className="mx-auto w-full max-w-5xl px-4 py-10 md:px-6">
-        <div className="mb-10 max-w-3xl">
+      <main className="mx-auto w-full max-w-6xl px-6 py-12">
+        <div className="mb-14 max-w-md">
           <Progress value={completion}>
-            <ProgressLabel>{text.progress}</ProgressLabel>
+            <ProgressLabel className="text-[11px] uppercase tracking-[0.22em] text-muted-foreground">
+              {text.progress}
+            </ProgressLabel>
             <ProgressValue />
           </Progress>
         </div>
