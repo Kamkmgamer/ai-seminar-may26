@@ -4,6 +4,10 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 
 import {
+  getCompletedLessonSlugs,
+  subscribeToLessonProgress,
+} from "@/components/lesson-completion";
+import {
   getChapterLabel,
   readyLessons,
   type Locale,
@@ -40,6 +44,15 @@ export function LessonPathRail({
     headings[0]?.id,
   );
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [completedSlugs, setCompletedSlugs] = useState<Set<string>>(
+    () => new Set(),
+  );
+
+  useEffect(() => {
+    const sync = () => setCompletedSlugs(getCompletedLessonSlugs());
+    sync();
+    return subscribeToLessonProgress(sync);
+  }, []);
 
   useEffect(() => {
     if (typeof window === "undefined" || headings.length === 0) return;
@@ -70,6 +83,7 @@ export function LessonPathRail({
     <ol className="flex flex-col">
       {readyLessons.map((lesson, i) => {
         const isActive = lesson.slug === activeSlug;
+        const isComplete = completedSlugs.has(lesson.slug);
         const chapter = getChapterLabel(lesson.slug, locale);
         return (
           <li key={lesson.slug}>
@@ -109,8 +123,11 @@ export function LessonPathRail({
                   ) : null}
                 </div>
                 {chapter ? (
-                  <span className="mt-1 block text-[10px] uppercase tracking-[0.18em] text-muted-foreground/70">
-                    {chapter} · {lesson.minutes} min
+                  <span className="mt-1 flex items-center gap-2 text-[10px] uppercase tracking-[0.18em] text-muted-foreground/70">
+                    <span>{chapter} · {lesson.minutes} min</span>
+                    {isComplete ? (
+                      <span className="font-mono text-[color:var(--chart-4)]">✓</span>
+                    ) : null}
                   </span>
                 ) : null}
               </div>

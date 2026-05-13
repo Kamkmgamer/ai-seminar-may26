@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 
 import { CourseShell } from "@/components/course-shell";
+import { LessonCompletion } from "@/components/lesson-completion";
 import { LessonFooterNav } from "@/components/lesson-footer-nav";
 import { LessonPathRail } from "@/components/lesson-path-rail";
 import {
@@ -106,6 +107,8 @@ export default async function LessonPage({
           <div className="mdx-body max-w-3xl pt-10">
             <LessonContent />
           </div>
+
+          <LessonCompletion locale={locale} slug={slug} />
 
           <LessonFooterNav
             locale={locale}

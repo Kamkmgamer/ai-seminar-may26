@@ -34,6 +34,7 @@ const copy = {
     primary: "Start the guide",
     secondary: "What is an agent?",
     catalog: "Compare agent tools",
+    references: "Official references",
     statOne: { v: "0", l: "lines of code required to start" },
     statTwo: { v: "8", l: "lessons, English + Arabic" },
     statThree: { v: "1", l: "deployed site you keep" },
@@ -132,6 +133,7 @@ const copy = {
     primary: "ابدأ الدليل",
     secondary: "شنو الـagent؟",
     catalog: "قارن أدوات الـ agents",
+    references: "المراجع الرسمية",
     statOne: { v: "0", l: "سطر كود مطلوب في البداية" },
     statTwo: { v: "8", l: "دروس، إنجليزي + عربي" },
     statThree: { v: "1", l: "موقع منشور يخصك" },
@@ -381,6 +383,12 @@ export default async function LocaleHome({
                 className="text-sm underline decoration-muted-foreground/40 decoration-1 underline-offset-[6px] hover:decoration-foreground"
               >
                 {text.catalog}
+              </Link>
+              <Link
+                href={`/${locale}/references`}
+                className="text-sm underline decoration-muted-foreground/40 decoration-1 underline-offset-[6px] hover:decoration-foreground"
+              >
+                {text.references}
               </Link>
             </div>
             <div className="mt-2 grid max-w-xl grid-cols-3 gap-x-8">

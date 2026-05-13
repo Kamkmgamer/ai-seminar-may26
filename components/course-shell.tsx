@@ -1,5 +1,6 @@
 import Link from "next/link";
 
+import { AuthMenu } from "@/components/auth-menu";
 import { LanguageSwitcher } from "@/components/language-switcher";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { Progress, ProgressLabel, ProgressValue } from "@/components/ui/progress";
@@ -23,6 +24,8 @@ const copy = {
     eyebrow: "Student field guide",
     progress: "Learning map preview",
     agents: "Agents",
+    references: "References",
+    leaderboard: "Leaderboard",
     lessonOf: (n: number, total: number) =>
       `Lesson ${String(n).padStart(2, "0")} of ${String(total).padStart(2, "0")}`,
   },
@@ -31,6 +34,8 @@ const copy = {
     eyebrow: "دليل عملي للطلاب",
     progress: "معاينة خريطة التعلم",
     agents: "الوكلاء",
+    references: "المراجع",
+    leaderboard: "الترتيب",
     lessonOf: (n: number, total: number) =>
       `الدرس ${String(n).padStart(2, "0")} من ${String(total).padStart(2, "0")}`,
   },
@@ -57,6 +62,19 @@ export function CourseShell({ locale, activeSlug, children }: CourseShellProps) 
             >
               {text.agents}
             </Link>
+            <Link
+              href={`/${locale}/references`}
+              className="hidden rounded-md px-2.5 py-1.5 text-sm font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-foreground lg:inline-flex"
+            >
+              {text.references}
+            </Link>
+            <Link
+              href={`/${locale}/leaderboard`}
+              className="hidden rounded-md px-2.5 py-1.5 text-sm font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-foreground xl:inline-flex"
+            >
+              {text.leaderboard}
+            </Link>
+            <AuthMenu locale={locale} />
             <LanguageSwitcher locale={locale} slug={activeSlug} />
             <ThemeToggle />
           </div>
