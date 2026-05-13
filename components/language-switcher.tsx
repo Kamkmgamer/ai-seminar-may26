@@ -1,4 +1,7 @@
+"use client";
+
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 import { Button } from "@/components/ui/button";
 import { localeLabels, locales, type Locale } from "@/lib/course";
@@ -9,10 +12,20 @@ type LanguageSwitcherProps = {
 };
 
 export function LanguageSwitcher({ locale, slug }: LanguageSwitcherProps) {
+  const pathname = usePathname();
+
+  function getHref(nextLocale: Locale) {
+    if (pathname) {
+      return pathname.replace(/^\/(en|ar)(?=\/|$)/, `/${nextLocale}`);
+    }
+
+    return slug ? `/${nextLocale}/learn/${slug}` : `/${nextLocale}`;
+  }
+
   return (
     <div className="flex items-center gap-2">
       {locales.map((item) => {
-        const href = slug ? `/${item}/learn/${slug}` : `/${item}`;
+        const href = getHref(item);
 
         return (
           <Button

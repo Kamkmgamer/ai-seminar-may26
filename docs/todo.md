@@ -13,7 +13,7 @@
 - [ ] Build reusable lesson components: callout, warning, command block, reference box, checklist, OS tabs, lesson navigation.
 - [ ] Build the mission-control landing/course entry page.
 - [ ] Create placeholder MDX lessons in English and Arabic for every planned module.
-- [ ] Add a language switcher that maps equivalent pages between locales.
+- [x] Add a language switcher that maps equivalent pages between locales.
 - [ ] Add theme toggle for light and dark mode.
 
 ## Phase 2: Core Course Content
@@ -112,7 +112,7 @@
 - [ ] Test sign-in and saved progress.
 - [ ] Test admin access with allowlisted email.
 - [ ] Test non-admin denial for admin routes.
-- [ ] Test locale switching between equivalent English and Arabic pages.
+- [x] Test locale switching between equivalent English and Arabic pages.
 - [ ] Test RTL layout for Arabic pages.
 - [ ] Test light and dark themes.
 - [ ] Test desktop three-zone layout.
