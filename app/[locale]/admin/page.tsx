@@ -2,6 +2,7 @@ import { auth } from "@clerk/nextjs/server";
 import { and, count, eq } from "drizzle-orm";
 import { notFound } from "next/navigation";
 
+import { resetStudentProgressAction } from "@/app/actions/progress";
 import {
   checklistProgress,
   lessonProgress,
@@ -13,6 +14,7 @@ import { Badge } from "@/components/ui/badge";
 import { getAdminEmailAllowlist, isCurrentUserAdmin } from "@/lib/admin";
 import { isLocale, type Locale } from "@/lib/course";
 import { getDb } from "@/lib/db";
+import { getMilestoneBadges } from "@/lib/milestones";
 
 const copy = {
   en: {
@@ -26,6 +28,9 @@ const copy = {
     links: "Project links",
     students: "Student progress",
     noNickname: "Unnamed student",
+    reset: "Reset progress",
+    resetConfirm: "Type RESET",
+    badges: "Badges",
   },
   ar: {
     badge: "لوحة المدرب",
@@ -38,6 +43,9 @@ const copy = {
     links: "روابط المشاريع",
     students: "تقدم الطلاب",
     noNickname: "طالب بدون اسم",
+    reset: "صفّر التقدم",
+    resetConfirm: "اكتب RESET",
+    badges: "الشارات",
   },
 } satisfies Record<Locale, Record<string, string>>;
 
@@ -163,7 +171,9 @@ export default async function AdminPage({
                   <th className="py-3 text-start font-medium">{text.profiles}</th>
                   <th className="py-3 text-start font-medium">{text.lessons}</th>
                   <th className="py-3 text-start font-medium">{text.checklist}</th>
+                  <th className="py-3 text-start font-medium">{text.badges}</th>
                   <th className="py-3 text-start font-medium">{text.links}</th>
+                  <th className="py-3 text-start font-medium">{text.reset}</th>
                 </tr>
               </thead>
               <tbody>
@@ -174,6 +184,22 @@ export default async function AdminPage({
                     </td>
                     <td className="py-4 font-mono">{row.completedLessons}</td>
                     <td className="py-4 font-mono">{row.completedChecklistItems}</td>
+                    <td className="py-4">
+                      <div className="flex max-w-48 flex-wrap gap-1.5">
+                        {getMilestoneBadges({
+                          completedLessons: row.completedLessons,
+                          completedChecklistItems: row.completedChecklistItems,
+                          submittedLinks: row.links.length,
+                        }).map((badge) => (
+                          <span
+                            key={badge.key}
+                            className="rounded-full border border-dashed px-2 py-0.5 text-xs text-foreground/80"
+                          >
+                            {badge.label[locale]}
+                          </span>
+                        ))}
+                      </div>
+                    </td>
                     <td className="py-4">
                       <div className="flex flex-col gap-1">
                         {row.links.length === 0 ? (
@@ -192,6 +218,23 @@ export default async function AdminPage({
                           ))
                         )}
                       </div>
+                    </td>
+                    <td className="py-4">
+                      <form action={resetStudentProgressAction} className="flex min-w-40 gap-2">
+                        <input type="hidden" name="profileId" value={row.profile.id} />
+                        <input
+                          name="confirmation"
+                          aria-label={text.resetConfirm}
+                          placeholder="RESET"
+                          className="h-9 w-20 rounded-md border bg-background px-2 text-xs outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
+                        />
+                        <button
+                          type="submit"
+                          className="h-9 rounded-md border px-2 text-xs font-medium text-muted-foreground transition-colors hover:bg-destructive/10 hover:text-destructive"
+                        >
+                          {text.reset}
+                        </button>
+                      </form>
                     </td>
                   </tr>
                 ))}

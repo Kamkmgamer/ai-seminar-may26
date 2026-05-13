@@ -85,11 +85,11 @@
 - [x] Show aggregate checklist completion stats.
 - [x] Show individual student progress.
 - [x] Show submitted project links.
-- [ ] Add progress reset capability if needed.
+- [x] Add progress reset capability if needed.
 - [x] Build competitive leaderboard based on safe achievements.
 - [x] Use nicknames publicly and never display emails on the public leaderboard.
 - [x] Define leaderboard scoring rules.
-- [ ] Add milestone badges for safe achievements.
+- [x] Add milestone badges for safe achievements.
 - [x] Decide whether analytics export belongs in v1 or later.
 
 ## Phase 6: Advanced Agents

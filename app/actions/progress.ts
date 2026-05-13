@@ -13,6 +13,7 @@ import {
   projectLinks,
 } from "@/db/schema";
 import { getDb } from "@/lib/db";
+import { isCurrentUserAdmin } from "@/lib/admin";
 import { isLocale, readyLessons } from "@/lib/course";
 import { hasChecklistItem } from "@/lib/lesson-checklists";
 import { parseProjectLink } from "@/lib/project-links";
@@ -176,6 +177,30 @@ export async function submitProjectLinkAction(formData: FormData) {
   revalidatePath("/[locale]/leaderboard", "page");
 }
 
+export async function resetStudentProgressAction(formData: FormData) {
+  const isAdmin = await isCurrentUserAdmin();
+  if (!isAdmin) throw new Error("Admin access required.");
+
+  const profileId = formData.get("profileId");
+  const confirmation = formData.get("confirmation");
+
+  if (typeof profileId !== "string" || typeof confirmation !== "string") {
+    throw new Error("Missing reset fields.");
+  }
+
+  if (confirmation.trim() !== "RESET") {
+    return;
+  }
+
+  const db = getDb();
+
+  await db.delete(checklistProgress).where(eq(checklistProgress.profileId, profileId));
+  await db.delete(lessonProgress).where(eq(lessonProgress.profileId, profileId));
+
+  revalidatePath("/[locale]/admin", "page");
+  revalidatePath("/[locale]/leaderboard", "page");
+}
+
 export async function getSignedInProfile() {
   const { userId } = await auth();
   if (!userId || !process.env.DATABASE_URL) return null;
@@ -228,12 +253,17 @@ export async function getLeaderboardRows() {
         profileId: profiles.id,
         nickname: profiles.nickname,
         completedLessons: sql<number>`count(distinct ${lessonProgress.lessonSlug})::int`,
+        completedChecklistItems: sql<number>`count(distinct ${checklistProgress.id})::int`,
         submittedLinks: sql<number>`count(distinct ${projectLinks.id})::int`,
       })
       .from(profiles)
       .leftJoin(
         lessonProgress,
         and(eq(lessonProgress.profileId, profiles.id), eq(lessonProgress.completed, true)),
+      )
+      .leftJoin(
+        checklistProgress,
+        and(eq(checklistProgress.profileId, profiles.id), eq(checklistProgress.completed, true)),
       )
       .leftJoin(projectLinks, eq(projectLinks.profileId, profiles.id))
       .groupBy(profiles.id)

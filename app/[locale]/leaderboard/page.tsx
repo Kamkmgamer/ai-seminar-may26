@@ -4,6 +4,7 @@ import { getLeaderboardRows } from "@/app/actions/progress";
 import { CourseShell } from "@/components/course-shell";
 import { Badge } from "@/components/ui/badge";
 import { isLocale, type Locale } from "@/lib/course";
+import { getMilestoneBadges, type MilestoneBadge } from "@/lib/milestones";
 
 const copy = {
   en: {
@@ -16,6 +17,7 @@ const copy = {
     lessons: "Lessons",
     links: "Links",
     score: "Score",
+    badges: "Badges",
   },
   ar: {
     badge: "ترتيب آمن",
@@ -27,6 +29,7 @@ const copy = {
     lessons: "الدروس",
     links: "الروابط",
     score: "النقاط",
+    badges: "الشارات",
   },
 } satisfies Record<Locale, Record<string, string>>;
 
@@ -64,6 +67,7 @@ export default async function LeaderboardPage({
           <ol className="flex flex-col border-t border-dashed border-foreground/20">
             {rows.map((row, index) => {
               const score = row.completedLessons * 10 + row.submittedLinks * 5;
+              const badges = getMilestoneBadges(row);
               return (
                 <li
                   key={row.profileId}
@@ -78,6 +82,12 @@ export default async function LeaderboardPage({
                   <Metric label={text.lessons} value={row.completedLessons} />
                   <Metric label={text.links} value={row.submittedLinks} />
                   <Metric label={text.score} value={score} />
+                  {badges.length > 0 ? (
+                    <div className="md:col-start-2 md:col-end-6">
+                      <span className="sr-only">{text.badges}</span>
+                      <BadgeList badges={badges} locale={locale} />
+                    </div>
+                  ) : null}
                 </li>
               );
             })}
@@ -85,6 +95,21 @@ export default async function LeaderboardPage({
         )}
       </article>
     </CourseShell>
+  );
+}
+
+function BadgeList({ badges, locale }: { badges: MilestoneBadge[]; locale: Locale }) {
+  return (
+    <ul className="flex flex-wrap gap-2">
+      {badges.map((badge) => (
+        <li
+          key={badge.key}
+          className="rounded-full border border-dashed bg-card/70 px-2.5 py-1 text-xs font-medium text-foreground/80"
+        >
+          {badge.label[locale]}
+        </li>
+      ))}
+    </ul>
   );
 }
 
