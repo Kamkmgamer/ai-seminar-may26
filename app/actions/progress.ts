@@ -6,6 +6,7 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 
 import {
+  checklistProgress,
   courseEvents,
   lessonProgress,
   profiles,
@@ -13,6 +14,7 @@ import {
 } from "@/db/schema";
 import { getDb } from "@/lib/db";
 import { isLocale, readyLessons } from "@/lib/course";
+import { hasChecklistItem } from "@/lib/lesson-checklists";
 import { parseProjectLink } from "@/lib/project-links";
 
 const nicknameSchema = z.string().trim().min(2).max(40);
@@ -67,6 +69,48 @@ export async function saveLessonCompletion(slug: string, completed: boolean) {
   });
 
   revalidatePath("/[locale]/learn/[slug]", "page");
+}
+
+export async function saveChecklistCompletion(
+  lessonSlug: string,
+  itemKey: string,
+  completed: boolean,
+) {
+  if (!hasChecklistItem(lessonSlug, itemKey)) {
+    throw new Error("Unknown checklist item.");
+  }
+
+  const profile = await requireProfile();
+  const db = getDb();
+  const now = new Date();
+
+  await db
+    .insert(checklistProgress)
+    .values({
+      profileId: profile.id,
+      lessonSlug,
+      itemKey,
+      completed,
+      completedAt: completed ? now : null,
+    })
+    .onConflictDoUpdate({
+      target: [
+        checklistProgress.profileId,
+        checklistProgress.lessonSlug,
+        checklistProgress.itemKey,
+      ],
+      set: { completed, completedAt: completed ? now : null, updatedAt: now },
+    });
+
+  await db.insert(courseEvents).values({
+    profileId: profile.id,
+    type: completed ? "checklist_completed" : "checklist_reopened",
+    lessonSlug,
+    metadata: JSON.stringify({ itemKey }),
+  });
+
+  revalidatePath("/[locale]/learn/[slug]", "page");
+  revalidatePath("/[locale]/profile", "page");
 }
 
 export async function updateProfileAction(formData: FormData) {
@@ -160,7 +204,17 @@ export async function getSignedInDashboard() {
     .from(projectLinks)
     .where(eq(projectLinks.profileId, profile.id));
 
-  return { profile, completedLessons: completed?.value ?? 0, links };
+  const [completedChecklistItems] = await db
+    .select({ value: count() })
+    .from(checklistProgress)
+    .where(and(eq(checklistProgress.profileId, profile.id), eq(checklistProgress.completed, true)));
+
+  return {
+    profile,
+    completedLessons: completed?.value ?? 0,
+    completedChecklistItems: completedChecklistItems?.value ?? 0,
+    links,
+  };
 }
 
 export async function getLeaderboardRows() {

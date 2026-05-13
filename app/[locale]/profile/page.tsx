@@ -10,6 +10,7 @@ import { CourseShell } from "@/components/course-shell";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { isLocale, readyLessons, type Locale } from "@/lib/course";
+import { getChecklistItemCount } from "@/lib/lesson-checklists";
 
 const copy = {
   en: {
@@ -25,6 +26,7 @@ const copy = {
     os: "Laptop path",
     save: "Save profile",
     completed: "Completed lessons",
+    checklist: "Checklist items",
     github: "GitHub project URL",
     deployment: "Deployed portfolio URL",
     submit: "Save URL",
@@ -44,6 +46,7 @@ const copy = {
     os: "مسار اللابتوب",
     save: "احفظ البروفايل",
     completed: "دروس مكتملة",
+    checklist: "عناصر checklist",
     github: "رابط مشروع GitHub",
     deployment: "رابط البورتفوليو المنشور",
     submit: "احفظ الرابط",
@@ -84,6 +87,7 @@ export default async function ProfilePage({
   }
 
   const dashboard = await getSignedInDashboard();
+  const checklistTotal = getChecklistItemCount();
   const githubUrl = dashboard.links.find((link) => link.type === "github")?.url ?? "";
   const deploymentUrl =
     dashboard.links.find((link) => link.type === "deployment")?.url ?? "";
@@ -142,13 +146,23 @@ export default async function ProfilePage({
             <Button type="submit">{text.save}</Button>
           </form>
 
-          <aside className="rounded-[2rem] border border-dashed bg-card/60 p-6">
-            <p className="text-xs font-medium uppercase tracking-[0.18em] text-muted-foreground">
-              {text.completed}
-            </p>
-            <p className="mt-4 font-mono text-5xl font-semibold tracking-[-0.08em]">
-              {dashboard.completedLessons}/{readyLessons.length}
-            </p>
+          <aside className="grid gap-4 rounded-[2rem] border border-dashed bg-card/60 p-6">
+            <div>
+              <p className="text-xs font-medium uppercase tracking-[0.18em] text-muted-foreground">
+                {text.completed}
+              </p>
+              <p className="mt-4 font-mono text-5xl font-semibold tracking-[-0.08em]">
+                {dashboard.completedLessons}/{readyLessons.length}
+              </p>
+            </div>
+            <div className="border-t border-dashed border-foreground/20 pt-4">
+              <p className="text-xs font-medium uppercase tracking-[0.18em] text-muted-foreground">
+                {text.checklist}
+              </p>
+              <p className="mt-4 font-mono text-4xl font-semibold tracking-[-0.08em]">
+                {dashboard.completedChecklistItems}/{checklistTotal}
+              </p>
+            </div>
           </aside>
         </section>
 

@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 
 import { CourseShell } from "@/components/course-shell";
+import { LessonChecklist } from "@/components/lesson-checklist";
 import { LessonCompletion } from "@/components/lesson-completion";
 import { LessonFooterNav } from "@/components/lesson-footer-nav";
 import { LessonPathRail } from "@/components/lesson-path-rail";
@@ -14,6 +15,7 @@ import {
   readyLessons,
   type Locale,
 } from "@/lib/course";
+import { getLessonChecklist } from "@/lib/lesson-checklists";
 import { loadLessonHeadings } from "@/lib/lesson-headings";
 import { loadLesson } from "@/lib/lesson-modules";
 
@@ -63,6 +65,7 @@ export default async function LessonPage({
   const headings = await loadLessonHeadings(locale, slug);
   const text = lessonCopy[locale];
   const chapter = getChapterLabel(slug, locale);
+  const checklist = getLessonChecklist(slug);
 
   return (
     <CourseShell locale={locale} activeSlug={slug}>
@@ -107,6 +110,8 @@ export default async function LessonPage({
           <div className="mdx-body max-w-3xl pt-10">
             <LessonContent />
           </div>
+
+          <LessonChecklist locale={locale} lessonSlug={slug} items={checklist} />
 
           <LessonCompletion locale={locale} slug={slug} />
 

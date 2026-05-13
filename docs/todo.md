@@ -67,7 +67,7 @@
 - [x] Define schema for users/profiles, preferences, lesson progress, checklist progress, project links, and course events.
 - [x] Add migration workflow.
 - [x] Save completed lessons for signed-in users.
-- [ ] Save completed checklist items for signed-in users.
+- [x] Save completed checklist items for signed-in users.
 - [x] Save selected locale and OS/path preferences.
 - [x] Add nickname editing.
 - [x] Add optional GitHub project URL submission.

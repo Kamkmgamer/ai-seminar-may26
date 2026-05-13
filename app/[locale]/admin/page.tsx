@@ -101,7 +101,7 @@ export default async function AdminPage({
   const studentProfiles = await db.select().from(profiles).limit(50);
   const studentRows = await Promise.all(
     studentProfiles.map(async (profile) => {
-      const [[completed], links] = await Promise.all([
+      const [[completed], [completedChecklist], links] = await Promise.all([
         db
           .select({ value: count() })
           .from(lessonProgress)
@@ -111,12 +111,22 @@ export default async function AdminPage({
               eq(lessonProgress.completed, true),
             ),
           ),
+        db
+          .select({ value: count() })
+          .from(checklistProgress)
+          .where(
+            and(
+              eq(checklistProgress.profileId, profile.id),
+              eq(checklistProgress.completed, true),
+            ),
+          ),
         db.select().from(projectLinks).where(eq(projectLinks.profileId, profile.id)),
       ]);
 
       return {
         profile,
         completedLessons: completed?.value ?? 0,
+        completedChecklistItems: completedChecklist?.value ?? 0,
         links,
       };
     }),
@@ -152,6 +162,7 @@ export default async function AdminPage({
                 <tr className="border-b border-dashed border-foreground/20">
                   <th className="py-3 text-start font-medium">{text.profiles}</th>
                   <th className="py-3 text-start font-medium">{text.lessons}</th>
+                  <th className="py-3 text-start font-medium">{text.checklist}</th>
                   <th className="py-3 text-start font-medium">{text.links}</th>
                 </tr>
               </thead>
@@ -162,6 +173,7 @@ export default async function AdminPage({
                       {row.profile.nickname || text.noNickname}
                     </td>
                     <td className="py-4 font-mono">{row.completedLessons}</td>
+                    <td className="py-4 font-mono">{row.completedChecklistItems}</td>
                     <td className="py-4">
                       <div className="flex flex-col gap-1">
                         {row.links.length === 0 ? (
