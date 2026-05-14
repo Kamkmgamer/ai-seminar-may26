@@ -29,16 +29,6 @@ export default async function Image() {
           fill="#fafafa"
         />
         <circle cx={600} cy={290} r={40} fill="#fafafa" />
-        <text
-          x={600}
-          y={580}
-          fontFamily="system-ui, sans-serif"
-          fontSize={48}
-          fill="#888"
-          textAnchor="middle"
-        >
-          AI Seminar 2026
-        </text>
       </svg>
     ),
     {
