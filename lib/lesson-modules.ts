@@ -7,6 +7,9 @@ const modules: Record<Locale, Record<string, LessonLoader>> = {
   en: {
     welcome: () => import("@/content/lessons/en/welcome.mdx"),
     agents: () => import("@/content/lessons/en/agents.mdx"),
+    "opencode-concept": () =>
+      import("@/content/lessons/en/opencode-concept.mdx"),
+    "linux-basics": () => import("@/content/lessons/en/linux-basics.mdx"),
     "windows-setup": () => import("@/content/lessons/en/windows-setup.mdx"),
     "node-npm": () => import("@/content/lessons/en/node-npm.mdx"),
     "opencode-hands-on": () =>
@@ -18,6 +21,9 @@ const modules: Record<Locale, Record<string, LessonLoader>> = {
   ar: {
     welcome: () => import("@/content/lessons/ar/welcome.mdx"),
     agents: () => import("@/content/lessons/ar/agents.mdx"),
+    "opencode-concept": () =>
+      import("@/content/lessons/ar/opencode-concept.mdx"),
+    "linux-basics": () => import("@/content/lessons/ar/linux-basics.mdx"),
     "windows-setup": () => import("@/content/lessons/ar/windows-setup.mdx"),
     "node-npm": () => import("@/content/lessons/ar/node-npm.mdx"),
     "opencode-hands-on": () =>
