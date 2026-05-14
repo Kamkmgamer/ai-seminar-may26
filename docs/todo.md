@@ -2,41 +2,41 @@
 
 ## Phase 1: Foundation And Content Shell
 
-- [ ] Verify Next.js 16 app-router, MDX, and metadata conventions from installed docs or current official docs.
-- [ ] Install and configure shadcn/ui for this project.
-- [ ] Define custom design tokens for the tinted white/blue theme and polished ink-dark theme.
-- [ ] Create locale routing with `/en` and `/ar` route prefixes.
-- [ ] Add RTL support for Arabic routes.
-- [ ] Choose and configure MDX support.
-- [ ] Create the base course layout: left course map, center lesson, right progress/checklist panel.
-- [ ] Create mobile lesson-first layout.
-- [ ] Build reusable lesson components: callout, warning, command block, reference box, checklist, OS tabs, lesson navigation.
-- [ ] Build the mission-control landing/course entry page.
-- [ ] Create placeholder MDX lessons in English and Arabic for every planned module.
+- [x] Verify Next.js 16 app-router, MDX, and metadata conventions from installed docs or current official docs.
+- [x] Install and configure shadcn/ui for this project.
+- [x] Define custom design tokens for the tinted white/blue theme and polished ink-dark theme.
+- [x] Create locale routing with `/en` and `/ar` route prefixes.
+- [x] Add RTL support for Arabic routes.
+- [x] Choose and configure MDX support.
+- [x] Create the base course layout: left course map, center lesson, right progress/checklist panel.
+- [x] Create mobile lesson-first layout.
+- [x] Build reusable lesson components: callout, warning, command block, reference box, checklist, OS tabs, lesson navigation.
+- [x] Build the mission-control landing/course entry page.
+- [x] Create placeholder MDX lessons in English and Arabic for every planned module.
 - [x] Add a language switcher that maps equivalent pages between locales.
-- [ ] Add theme toggle for light and dark mode.
+- [x] Add theme toggle for light and dark mode.
 
 ## Phase 2: Core Course Content
 
-- [ ] Write the welcome and workshop orientation lesson.
-- [ ] Write the “What AI agents are” lesson.
-- [ ] Write the OpenCode concept/demo lesson.
-- [ ] Write the Windows setup lesson.
-- [ ] Write the basic Linux guide.
-- [ ] Write the Node and npm setup lesson.
-- [ ] Verify official OpenCode installation instructions.
-- [ ] Write the OpenCode installation and hands-on usage lesson.
-- [ ] Write the personal portfolio build lesson.
-- [ ] Write the Git and GitHub setup lesson.
-- [ ] Write the secrets safety checklist lesson.
-- [ ] Write the deployment choice overview.
-- [ ] Write the Vercel deployment guide.
-- [ ] Write the Netlify deployment guide.
-- [ ] Write the GitHub Pages deployment guide for static-compatible projects.
-- [ ] Translate or co-write all core lessons in light Sudanese Arabic.
-- [ ] Add inline official references and end-of-lesson reference boxes.
-- [ ] Add “what just happened?” explanations after important commands.
-- [ ] Add safety labels to risky command blocks.
+- [x] Write the welcome and workshop orientation lesson.
+- [x] Write the “What AI agents are” lesson.
+- [x] Write the OpenCode concept/demo lesson.
+- [x] Write the Windows setup lesson.
+- [x] Write the basic Linux guide.
+- [x] Write the Node and npm setup lesson.
+- [x] Verify official OpenCode installation instructions.
+- [x] Write the OpenCode installation and hands-on usage lesson.
+- [x] Write the personal portfolio build lesson.
+- [x] Write the Git and GitHub setup lesson.
+- [x] Write the secrets safety checklist lesson.
+- [x] Write the deployment choice overview.
+- [x] Write the Vercel deployment guide.
+- [x] Write the Netlify deployment guide.
+- [x] Write the GitHub Pages deployment guide for static-compatible projects.
+- [x] Translate or co-write all core lessons in light Sudanese Arabic.
+- [x] Add inline official references and end-of-lesson reference boxes.
+- [x] Add “what just happened?” explanations after important commands.
+- [x] Add safety labels to risky command blocks.
 
 ## Phase 3: Agent Catalog And References
 
@@ -113,11 +113,11 @@
 - [ ] Test admin access with allowlisted email.
 - [ ] Test non-admin denial for admin routes.
 - [x] Test locale switching between equivalent English and Arabic pages.
-- [ ] Test RTL layout for Arabic pages.
-- [ ] Test light and dark themes.
-- [ ] Test desktop three-zone layout.
-- [ ] Test mobile lesson-first layout.
-- [ ] Test copy buttons and command block behavior.
+- [x] Test RTL layout for Arabic pages.
+- [x] Test light and dark themes.
+- [x] Test desktop three-zone layout.
+- [x] Test mobile lesson-first layout.
+- [x] Test copy buttons and command block behavior.
 - [ ] Review all official references.
 - [x] Check that no secrets are committed.
 - [x] Check that `.env*` files are ignored.
@@ -125,16 +125,16 @@
 
 ## Content Acceptance Checklist
 
-- [ ] Every lesson has a clear goal.
-- [ ] Every lesson has prerequisites.
-- [ ] Every command has the correct OS label.
-- [ ] Risky commands have safety warnings.
-- [ ] Important commands explain expected output.
-- [ ] Every lesson has checklist items.
-- [ ] Every install instruction links to official docs.
-- [ ] Fast-changing model/pricing information links out instead of making fixed promises.
-- [ ] Arabic content is complete and RTL-friendly.
-- [ ] Technical terms are understandable in both Arabic and English.
+- [x] Every lesson has a clear goal.
+- [x] Every lesson has prerequisites.
+- [x] Every command has the correct OS label.
+- [x] Risky commands have safety warnings.
+- [x] Important commands explain expected output.
+- [x] Every lesson has checklist items.
+- [x] Every install instruction links to official docs.
+- [x] Fast-changing model/pricing information links out instead of making fixed promises.
+- [x] Arabic content is complete and RTL-friendly.
+- [x] Technical terms are understandable in both Arabic and English.
 
 ## Security And Privacy Acceptance Checklist
 

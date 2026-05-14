@@ -1,0 +1,47 @@
+# OpenCode قبل التثبيت
+
+قبل ما تثبت OpenCode، لازم تفهم نوع الأداة. OpenCode ما مجرد chat window. ده agent workflow حول مشروع: بقدر يفحص الملفات، يقترح تعديلات، يعدل، يشغل أوامر، ويرجع يشرح الحصل.
+
+## اللوب
+
+لوب الـ agent الآمن هو:
+
+1. اطلب هدف صغير.
+2. خلي الـ agent يفحص context.
+3. اقرأ الخطة.
+4. اسمح بتغيير صغير واحد.
+5. راجع الـ diff وشغل checks.
+
+## أول prompt آمن
+
+استخدم prompt يبطئ الـ agent:
+
+```text
+Look at this project and explain what it is. Do not edit files or run commands yet.
+```
+
+الـ prompt ده بعلم أهم عادة: افحص أولاً، نفذ ثانياً.
+
+## prompt تعديل آمن
+
+بعد ما تفهم المشروع، اطلب تعديل صغير:
+
+```text
+Make one small improvement to the homepage. Before editing, tell me which file you plan to change.
+```
+
+لو الـ agent عايز يشغل أمر، اقرأه قبل الموافقة. لو ما فاهمه، اسأل الأمر بعمل شنو.
+
+## تتحقق من شنو؟
+
+بعد التعديل، اسأل:
+
+```text
+Summarize the diff and tell me how to verify the change.
+```
+
+النتيجة المتوقعة: تعرف أي ملف اتغير، ليه اتغير، وأي أمر أو فحص في المتصفح يثبت إنه شغال.
+
+## مراجع رسمية
+
+- [وثائق OpenCode](https://opencode.ai/docs)

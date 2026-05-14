@@ -1,0 +1,45 @@
+# Basic Linux guide
+
+Linux shows up in AI work even if your laptop is Windows or macOS. Many hosting servers, containers, and terminal examples use Linux-style commands.
+
+## The map in your head
+
+Remember three ideas:
+
+- A folder is also called a directory.
+- The terminal is always “inside” one current directory.
+- Commands usually act on the current directory unless you give another path.
+
+## Safe commands to know
+
+Print where you are:
+
+```powershell
+pwd
+```
+
+Expected result: a folder path appears.
+
+List files:
+
+```powershell
+ls
+```
+
+Expected result: files and folders in the current directory appear.
+
+Move into a folder:
+
+```powershell
+cd my-project
+```
+
+Expected result: your prompt changes to show the new folder.
+
+## Slow down around destructive commands
+
+Be careful with commands that remove, overwrite, or force changes. If an AI agent suggests `rm`, `del`, `rmdir`, `git reset`, or anything with `--force`, stop and ask for an explanation first.
+
+## Official references
+
+- [PowerShell documentation](https://learn.microsoft.com/powershell/)

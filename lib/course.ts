@@ -48,6 +48,19 @@ export const lessons: Lesson[] = [
     },
   },
   {
+    slug: "opencode-concept",
+    status: "ready",
+    minutes: 12,
+    title: {
+      en: "OpenCode before installation",
+      ar: "OpenCode قبل التثبيت",
+    },
+    summary: {
+      en: "Preview the agent loop before installing anything: prompt, inspect, propose, edit, verify.",
+      ar: "شوف لوب الـ agent قبل أي تثبيت: prompt، فحص، اقتراح، تعديل، تحقق.",
+    },
+  },
+  {
     slug: "windows-setup",
     status: "ready",
     minutes: 18,
@@ -58,6 +71,19 @@ export const lessons: Lesson[] = [
     summary: {
       en: "Prepare a Windows machine for practical AI tools and agent workflows.",
       ar: "نجهز ويندوز لأدوات AI العملية وشغل الـ agents.",
+    },
+  },
+  {
+    slug: "linux-basics",
+    status: "ready",
+    minutes: 14,
+    title: {
+      en: "Basic Linux guide",
+      ar: "أساسيات Linux",
+    },
+    summary: {
+      en: "Learn the small set of Linux terminal habits that make AI agent work safer.",
+      ar: "اتعلم عادات Linux terminal البتخلي شغل الـ agents أكثر أماناً.",
     },
   },
   {
@@ -156,7 +182,9 @@ const chapterCopy: Record<Locale, Record<string, string>> = {
   en: {
     welcome: "Orientation",
     agents: "Foundation",
+    "opencode-concept": "Foundation",
     "windows-setup": "Setup",
+    "linux-basics": "Setup",
     "node-npm": "Setup",
     "opencode-hands-on": "Practice",
     portfolio: "Build",
@@ -166,7 +194,9 @@ const chapterCopy: Record<Locale, Record<string, string>> = {
   ar: {
     welcome: "البداية",
     agents: "الأساس",
+    "opencode-concept": "الأساس",
     "windows-setup": "التجهيز",
+    "linux-basics": "التجهيز",
     "node-npm": "التجهيز",
     "opencode-hands-on": "تطبيق",
     portfolio: "البناء",

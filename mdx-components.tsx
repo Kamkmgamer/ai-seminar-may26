@@ -2,6 +2,13 @@ import type { MDXComponents } from "mdx/types";
 import type { ReactNode } from "react";
 
 import { CodeBlock } from "@/components/code-block";
+import {
+  Callout,
+  OSPanel,
+  OSTabs,
+  ReferenceBox,
+  Warning,
+} from "@/components/lesson-components";
 
 function slugify(input: unknown): string {
   if (typeof input === "string") {
@@ -110,6 +117,11 @@ const components: MDXComponents = {
   hr: () => (
     <hr className="my-12 border-0 border-t border-dashed border-foreground/20" />
   ),
+  Callout,
+  Warning,
+  ReferenceBox,
+  OSTabs,
+  OSPanel,
 };
 
 export function useMDXComponents(): MDXComponents {

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, type ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 
 import { toast } from "@/components/toaster";
 
@@ -14,6 +14,20 @@ function extractText(node: ReactNode): string {
   return "";
 }
 
+function extractLanguage(node: ReactNode): string {
+  if (Array.isArray(node)) {
+    return node.map(extractLanguage).find(Boolean) ?? "";
+  }
+  if (node && typeof node === "object" && "props" in node) {
+    const props = (node as { props: { className?: string; children?: ReactNode } }).props;
+    if (typeof props.className === "string") {
+      return props.className.replace(/^language-/, "");
+    }
+    return extractLanguage(props.children);
+  }
+  return "";
+}
+
 function detectLocale(): "en" | "ar" {
   if (typeof document === "undefined") return "en";
   const root = document.documentElement.getAttribute("lang");
@@ -23,12 +37,35 @@ function detectLocale(): "en" | "ar" {
 }
 
 const labels = {
-  en: { copy: "Copy", copied: "Copied", toastOk: "Copied to clipboard", toastFail: "Couldn't copy" },
-  ar: { copy: "نسخ", copied: "تم", toastOk: "تم نسخ الكود", toastFail: "ما قدرنا ننسخ" },
+  en: {
+    copy: "Copy",
+    copied: "Copied",
+    prompt: "Prompt",
+    powershell: "Windows PowerShell",
+    review: "Review before running",
+    toastOk: "Copied to clipboard",
+    toastFail: "Couldn't copy",
+  },
+  ar: {
+    copy: "نسخ",
+    copied: "تم",
+    prompt: "Prompt",
+    powershell: "Windows PowerShell",
+    review: "راجع قبل التشغيل",
+    toastOk: "تم نسخ الكود",
+    toastFail: "ما قدرنا ننسخ",
+  },
 } as const;
 
 export function CodeBlock({ children }: { children: ReactNode }) {
   const [copied, setCopied] = useState(false);
+  const [locale, setLocale] = useState<"en" | "ar">("en");
+  const language = extractLanguage(children);
+
+  useEffect(() => {
+    const id = window.setTimeout(() => setLocale(detectLocale()), 0);
+    return () => window.clearTimeout(id);
+  }, []);
 
   async function handleCopy() {
     const locale = detectLocale();
@@ -43,10 +80,19 @@ export function CodeBlock({ children }: { children: ReactNode }) {
     }
   }
 
-  const t = labels.en;
+  const t = labels[locale];
+  const blockLabel = language === "powershell" ? t.powershell : t.prompt;
 
   return (
     <div className="group relative mt-6">
+      <div className="mb-2 flex flex-wrap items-center gap-2 font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
+        <span>{blockLabel}</span>
+        {language === "powershell" ? (
+          <span className="rounded-full border border-dashed px-2 py-0.5 text-[color:var(--chart-4)]">
+            {t.review}
+          </span>
+        ) : null}
+      </div>
       <pre
         dir="ltr"
         className="overflow-x-auto rounded-xl border border-foreground/10 bg-foreground/[0.03] p-5 pr-16 font-mono text-[0.875rem] leading-7 text-foreground shadow-[inset_0_1px_0_color-mix(in_oklch,var(--foreground)_6%,transparent)] dark:bg-foreground/[0.05]"

@@ -5,6 +5,7 @@ import { LessonChecklist } from "@/components/lesson-checklist";
 import { LessonCompletion } from "@/components/lesson-completion";
 import { LessonFooterNav } from "@/components/lesson-footer-nav";
 import { LessonPathRail } from "@/components/lesson-path-rail";
+import { LessonPrep } from "@/components/lesson-prep";
 import {
   getChapterLabel,
   getLesson,
@@ -18,6 +19,7 @@ import {
 import { getLessonChecklist } from "@/lib/lesson-checklists";
 import { loadLessonHeadings } from "@/lib/lesson-headings";
 import { loadLesson } from "@/lib/lesson-modules";
+import { getLessonPrerequisites } from "@/lib/lesson-prep";
 
 export function generateStaticParams() {
   return ["en", "ar"].flatMap((locale) =>
@@ -66,10 +68,11 @@ export default async function LessonPage({
   const text = lessonCopy[locale];
   const chapter = getChapterLabel(slug, locale);
   const checklist = getLessonChecklist(slug);
+  const prerequisites = getLessonPrerequisites(slug, locale);
 
   return (
     <CourseShell locale={locale} activeSlug={slug}>
-      <div className="grid gap-12 lg:grid-cols-[13rem_1fr] lg:gap-x-16">
+      <div className="grid gap-12 lg:grid-cols-[13rem_1fr] lg:gap-x-16 xl:grid-cols-[13rem_minmax(0,1fr)_18rem]">
         <LessonPathRail
           locale={locale}
           activeSlug={slug}
@@ -107,13 +110,25 @@ export default async function LessonPage({
             </div>
           </header>
 
+          <div className="pt-8">
+            <LessonPrep
+              locale={locale}
+              goal={lesson.summary[locale]}
+              prerequisites={prerequisites}
+            />
+          </div>
+
           <div className="mdx-body max-w-3xl pt-10">
             <LessonContent />
           </div>
 
-          <LessonChecklist locale={locale} lessonSlug={slug} items={checklist} />
+          <div className="xl:hidden">
+            <LessonChecklist locale={locale} lessonSlug={slug} items={checklist} />
+          </div>
 
-          <LessonCompletion locale={locale} slug={slug} />
+          <div className="xl:hidden">
+            <LessonCompletion locale={locale} slug={slug} />
+          </div>
 
           <LessonFooterNav
             locale={locale}
@@ -121,6 +136,13 @@ export default async function LessonPage({
             next={nextLesson}
           />
         </article>
+
+        <aside className="hidden xl:block">
+          <div className="sticky top-32 flex flex-col gap-5">
+            <LessonChecklist locale={locale} lessonSlug={slug} items={checklist} />
+            <LessonCompletion locale={locale} slug={slug} />
+          </div>
+        </aside>
       </div>
     </CourseShell>
   );

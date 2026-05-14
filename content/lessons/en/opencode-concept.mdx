@@ -1,0 +1,47 @@
+# OpenCode before installation
+
+Before installing OpenCode, understand what kind of tool it is. OpenCode is not just a chat window. It is an agent workflow around a project: it can inspect files, propose changes, edit, run commands, and report back.
+
+## The loop
+
+The safe agent loop is:
+
+1. Ask for a small goal.
+2. Let the agent inspect context.
+3. Read its plan.
+4. Allow one small change.
+5. Review the diff and run checks.
+
+## A safe first prompt
+
+Use a prompt that slows the agent down:
+
+```text
+Look at this project and explain what it is. Do not edit files or run commands yet.
+```
+
+That prompt teaches the most important habit: inspect first, act second.
+
+## A safe edit prompt
+
+After you understand the project, ask for one small edit:
+
+```text
+Make one small improvement to the homepage. Before editing, tell me which file you plan to change.
+```
+
+If the agent wants to run a command, read it before approving. If you do not understand it, ask what it does.
+
+## What to verify
+
+After an edit, ask:
+
+```text
+Summarize the diff and tell me how to verify the change.
+```
+
+Expected result: you should know which file changed, why it changed, and which command or browser check proves it works.
+
+## Official references
+
+- [OpenCode docs](https://opencode.ai/docs)
