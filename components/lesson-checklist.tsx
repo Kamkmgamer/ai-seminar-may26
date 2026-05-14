@@ -61,7 +61,7 @@ export function LessonChecklist({
   const { isSignedIn } = useUser();
   const [completedKeys, setCompletedKeys] = useState<Set<string>>(() => new Set());
   const [syncFailedKeys, setSyncFailedKeys] = useState<Set<string>>(() => new Set());
-  const [isPending, startTransition] = useTransition();
+  const [, startTransition] = useTransition();
 
   useEffect(() => {
     const sync = () => setCompletedKeys(getCompletedChecklistKeys());
@@ -126,22 +126,43 @@ export function LessonChecklist({
                 <input
                   type="checkbox"
                   checked={checked}
-                  disabled={isPending}
                   onChange={() => toggleItem(item.key)}
-                  className="mt-1 size-4 accent-[color:var(--chart-4)]"
+                  className="peer sr-only"
                 />
-                <span className="flex-1 text-sm leading-6">
-                  {item.label[locale]}
+                <span
+                  aria-hidden
+                  className={
+                    "mt-0.5 grid size-[1.05rem] shrink-0 place-items-center rounded-[5px] border transition-colors " +
+                    "peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-[color:var(--chart-4)] " +
+                    (checked
+                      ? "border-[color:var(--chart-4)] bg-[color:var(--chart-4)] text-[color:var(--background)]"
+                      : "border-foreground/30 bg-background group-hover:border-foreground/50")
+                  }
+                >
+                  <svg
+                    viewBox="0 0 12 12"
+                    className={"size-3 transition-opacity " + (checked ? "opacity-100" : "opacity-0")}
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <path d="M2.5 6.2 5 8.7l4.5-5" />
+                  </svg>
                 </span>
-                {checked ? (
-                  <span className="shrink-0 text-xs font-medium text-[color:var(--chart-4)]">
-                    {syncFailed
-                      ? text.syncFailed
-                      : isSignedIn
-                        ? text.savedAccount
-                        : text.savedLocal}
-                  </span>
-                ) : null}
+                <span className="flex min-w-0 flex-1 flex-col gap-1">
+                  <span className="text-sm leading-6">{item.label[locale]}</span>
+                  {checked ? (
+                    <span className="text-xs font-medium text-[color:var(--chart-4)]">
+                      {syncFailed
+                        ? text.syncFailed
+                        : isSignedIn
+                          ? text.savedAccount
+                          : text.savedLocal}
+                    </span>
+                  ) : null}
+                </span>
               </label>
             </li>
           );

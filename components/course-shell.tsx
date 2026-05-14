@@ -15,6 +15,7 @@ import {
 type CourseShellProps = {
   locale: Locale;
   activeSlug?: string;
+  variant?: "default" | "landing";
   children: React.ReactNode;
 };
 
@@ -41,36 +42,68 @@ const copy = {
   },
 } satisfies Record<Locale, Record<string, unknown>>;
 
-export function CourseShell({ locale, activeSlug, children }: CourseShellProps) {
+export function CourseShell({
+  locale,
+  activeSlug,
+  variant = "default",
+  children,
+}: CourseShellProps) {
   const text = copy[locale];
   const lessonMode = Boolean(activeSlug);
+  const landingMode = variant === "landing";
 
   return (
-    <div className="min-h-screen text-foreground">
-      <header className="sticky top-0 z-20 bg-background/85 backdrop-blur supports-[backdrop-filter]:bg-background/75 dark:bg-background/90 dark:supports-[backdrop-filter]:bg-background/80">
-        <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-6 py-5">
+    <div className="site-shell min-h-screen text-foreground">
+      <header
+        className={
+          landingMode
+            ? "site-header sticky top-0 z-20"
+            : "site-header sticky top-0 z-20"
+        }
+      >
+        <div
+          className={
+            landingMode
+              ? "mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-3 sm:px-6 lg:px-8"
+              : "mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-3 sm:px-6 lg:px-8"
+          }
+        >
           <Link href={`/${locale}`} className="group flex items-baseline gap-3">
-            <span className="text-lg font-semibold tracking-tight">{text.brand}</span>
-            <span className="hidden text-[11px] uppercase tracking-[0.22em] text-muted-foreground md:inline">
+            <span className="text-sm font-semibold tracking-tight text-[color:var(--site-strong)]">
+              {text.brand}
+            </span>
+            <span className="hidden text-[10px] uppercase tracking-[0.22em] text-[color:var(--site-muted)] md:inline">
               · {text.eyebrow}
             </span>
           </Link>
           <div className="flex items-center gap-2">
             <Link
               href={`/${locale}/agents`}
-              className="hidden rounded-md px-2.5 py-1.5 text-sm font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-foreground md:inline-flex"
+              className={
+                landingMode
+                  ? "hidden rounded-md px-2.5 py-1.5 text-sm font-medium text-[color:var(--site-muted)] transition-colors hover:bg-[color:var(--site-hover)] hover:text-[color:var(--site-strong)] md:inline-flex"
+                  : "hidden rounded-md px-2.5 py-1.5 text-sm font-medium text-[color:var(--site-muted)] transition-colors hover:bg-[color:var(--site-hover)] hover:text-[color:var(--site-strong)] md:inline-flex"
+              }
             >
               {text.agents}
             </Link>
             <Link
               href={`/${locale}/references`}
-              className="hidden rounded-md px-2.5 py-1.5 text-sm font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-foreground lg:inline-flex"
+              className={
+                landingMode
+                  ? "hidden rounded-md px-2.5 py-1.5 text-sm font-medium text-[color:var(--site-muted)] transition-colors hover:bg-[color:var(--site-hover)] hover:text-[color:var(--site-strong)] lg:inline-flex"
+                  : "hidden rounded-md px-2.5 py-1.5 text-sm font-medium text-[color:var(--site-muted)] transition-colors hover:bg-[color:var(--site-hover)] hover:text-[color:var(--site-strong)] lg:inline-flex"
+              }
             >
               {text.references}
             </Link>
             <Link
               href={`/${locale}/leaderboard`}
-              className="hidden rounded-md px-2.5 py-1.5 text-sm font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-foreground xl:inline-flex"
+              className={
+                landingMode
+                  ? "hidden rounded-md px-2.5 py-1.5 text-sm font-medium text-[color:var(--site-muted)] transition-colors hover:bg-[color:var(--site-hover)] hover:text-[color:var(--site-strong)] xl:inline-flex"
+                  : "hidden rounded-md px-2.5 py-1.5 text-sm font-medium text-[color:var(--site-muted)] transition-colors hover:bg-[color:var(--site-hover)] hover:text-[color:var(--site-strong)] xl:inline-flex"
+              }
             >
               {text.leaderboard}
             </Link>
@@ -84,8 +117,14 @@ export function CourseShell({ locale, activeSlug, children }: CourseShellProps) 
         ) : null}
       </header>
 
-      <main className="mx-auto w-full max-w-6xl px-6 pb-20 pt-10 md:pt-12">
-        {!lessonMode ? (
+      <main
+        className={
+          landingMode
+            ? "site-main w-full"
+            : "site-main mx-auto w-full max-w-7xl px-4 pb-20 pt-10 sm:px-6 lg:px-8 md:pt-12"
+        }
+      >
+        {!lessonMode && !landingMode ? (
           <div className="mb-14 max-w-md">
             <Progress value={Math.round((readyLessons.length / lessons.length) * 100)}>
               <ProgressLabel className="text-[11px] uppercase tracking-[0.22em] text-muted-foreground">

@@ -13,10 +13,17 @@ export function ThemeToggle() {
   }
 
   return (
-    <Button variant="outline" size="sm" onClick={toggleTheme} type="button">
-      <SunIcon data-icon="inline-start" />
-      <MoonIcon data-icon="inline-start" />
-      Theme
+    <Button
+      aria-label="Toggle theme"
+      className="site-icon-button"
+      variant="outline"
+      size="icon-sm"
+      onClick={toggleTheme}
+      type="button"
+      title="Toggle theme"
+    >
+      <SunIcon className="site-sun-icon size-3.5" />
+      <MoonIcon className="site-moon-icon size-3.5" />
     </Button>
   );
 }

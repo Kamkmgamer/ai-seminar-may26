@@ -100,22 +100,19 @@ export function LessonCompletion({
   }
 
   return (
-    <section className="my-10 grid gap-4 rounded-[1.75rem] border border-dashed bg-card/60 p-5 sm:grid-cols-[1fr_auto] sm:items-center">
-      <div>
+    <section className="my-10 flex flex-col gap-4 rounded-[1.75rem] border border-dashed bg-card/60 p-5">
+      <div className="min-w-0">
         <p className="text-[10px] font-medium uppercase tracking-[0.22em] text-muted-foreground">
           {text.label}
         </p>
-        <h2 className="mt-2 text-xl font-semibold tracking-tight">{text.title}</h2>
+        <h2 className="mt-2 text-xl font-semibold tracking-tight break-words">
+          {text.title}
+        </h2>
         <p className="mt-2 max-w-2xl text-sm leading-6 text-muted-foreground">
           {text.body}
         </p>
       </div>
-      <div className="flex items-center gap-3 sm:justify-end">
-        {isComplete ? (
-          <span className="text-sm font-medium text-[color:var(--chart-4)]">
-            {isSignedIn && !syncFailed ? text.savedAccount : text.saved}
-          </span>
-        ) : null}
+      <div className="flex flex-wrap items-center gap-3">
         <Button
           type="button"
           variant={isComplete ? "outline" : "default"}
@@ -123,6 +120,11 @@ export function LessonCompletion({
         >
           {isComplete ? text.unmark : text.mark}
         </Button>
+        {isComplete ? (
+          <span className="text-sm font-medium text-[color:var(--chart-4)]">
+            {isSignedIn && !syncFailed ? text.savedAccount : text.saved}
+          </span>
+        ) : null}
       </div>
     </section>
   );

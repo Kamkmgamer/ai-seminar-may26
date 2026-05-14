@@ -34,6 +34,18 @@ const copy = {
   },
 } satisfies Record<Locale, Record<string, string>>;
 
+const agentLogos: Record<string, string> = {
+  opencode: "opencode.svg",
+  codex: "openai.svg",
+  "claude-code": "claude.svg",
+  cursor: "cursor.svg",
+  windsurf: "cursor.svg",
+  "github-copilot": "copilot.svg",
+  continue: "vscode.svg",
+  aider: "github.svg",
+  openhands: "opencode.svg",
+};
+
 export default async function AgentCatalogPage({
   params,
 }: {
@@ -76,16 +88,28 @@ export default async function AgentCatalogPage({
           {agentCatalog.map((agent) => (
             <article
               key={agent.slug}
-              className="group flex min-h-[29rem] flex-col rounded-[1.75rem] border bg-card p-5 transition-colors hover:bg-accent/35"
+              className="group flex min-h-[29rem] flex-col rounded-[0.9rem] border bg-card p-5 transition-colors hover:bg-accent/35"
             >
               <div className="flex items-start justify-between gap-4">
-                <div>
+                <div className="flex items-start gap-3">
+                  <span className="grid size-10 shrink-0 place-items-center rounded-xl border bg-background/70 text-foreground">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      className="tool-logo size-5"
+                      src={`/tools/${agentLogos[agent.slug] ?? "openai.svg"}`}
+                      alt=""
+                      width={20}
+                      height={20}
+                    />
+                  </span>
+                  <div>
                   <p className="text-xs font-medium uppercase tracking-[0.18em] text-muted-foreground">
                     {agent.type[locale]}
                   </p>
                   <h2 className="mt-2 text-2xl font-semibold tracking-tight">
                     {agent.name}
                   </h2>
+                  </div>
                 </div>
                 <Badge variant={agent.sourceStatus === "official" ? "default" : "outline"}>
                   {agent.sourceStatus === "official" ? text.official : text.verify}

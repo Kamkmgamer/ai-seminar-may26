@@ -45,7 +45,9 @@ function Tile({
 }) {
   const i = indexOf(lesson.slug);
   const chapter = getChapterLabel(lesson.slug, locale);
-  const arrow = direction === "next" ? "→" : "←";
+  const isRtl = locale === "ar";
+  const arrow =
+    direction === "next" ? (isRtl ? "←" : "→") : isRtl ? "→" : "←";
   return (
     <Link
       href={`/${locale}/learn/${lesson.slug}`}
@@ -102,11 +104,14 @@ export function LessonFooterNav({
   next,
 }: LessonFooterNavProps) {
   const text = footerCopy[locale];
+  const isRtl = locale === "ar";
+  const prevArrow = isRtl ? "→" : "←";
+  const nextArrow = isRtl ? "←" : "→";
 
   return (
     <footer className="mt-20 border-t border-dashed border-foreground/20 pt-6">
-      <div className="grid gap-px bg-foreground/15 md:grid-cols-2">
-        <div className="bg-background">
+      <div className="grid md:grid-cols-2 md:divide-x md:divide-dashed md:divide-foreground/15 md:rtl:divide-x-reverse">
+        <div className="md:pe-8">
           {previous ? (
             <Tile
               lesson={previous}
@@ -120,7 +125,7 @@ export function LessonFooterNav({
               className="group flex flex-col items-start gap-2 py-7 text-start"
             >
               <span className="text-[10px] uppercase tracking-[0.22em] text-muted-foreground">
-                ← {text.previous}
+                {prevArrow} {text.previous}
               </span>
               <span className="text-lg font-semibold tracking-tight text-foreground transition-colors group-hover:text-[color:var(--chart-4)]">
                 {text.backToCourse}
@@ -128,7 +133,7 @@ export function LessonFooterNav({
             </Link>
           )}
         </div>
-        <div className="bg-background">
+        <div className="md:ps-8">
           {next ? (
             <Tile
               lesson={next}
@@ -139,7 +144,7 @@ export function LessonFooterNav({
           ) : (
             <div className="flex flex-col items-end gap-2 py-7 text-end">
               <span className="text-[10px] uppercase tracking-[0.22em] text-muted-foreground">
-                {text.next} →
+                {text.next} {nextArrow}
               </span>
               <Link
                 href={`/${locale}`}

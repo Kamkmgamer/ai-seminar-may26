@@ -1,9 +1,25 @@
 import Link from "next/link";
+import {
+  ArrowRight,
+  BookOpen,
+  Check,
+  ChevronRight,
+  Cpu,
+  FileCode2,
+  GitBranch,
+  GraduationCap,
+  Laptop,
+  LockKeyhole,
+  Network,
+  Play,
+  Terminal,
+  Wrench,
+} from "lucide-react";
 import { notFound } from "next/navigation";
 
 import { CourseShell } from "@/components/course-shell";
 import { Button } from "@/components/ui/button";
-import { isLocale, lessons, type Locale } from "@/lib/course";
+import { isLocale, lessons, readyLessons, type Locale } from "@/lib/course";
 
 type Tool = {
   name: string;
@@ -12,330 +28,368 @@ type Tool = {
 };
 
 const tools: Tool[] = [
-  { name: "Claude", file: "claude.svg", role: { en: "Anthropic's reasoning model — careful thinking, code review, long edits.", ar: "موديل التفكير من Anthropic — مراجعة وتعديلات طويلة." } },
-  { name: "ChatGPT", file: "openai.svg", role: { en: "OpenAI's all-purpose helper. Where most people ask their first AI question.", ar: "مساعد OpenAI العام. أغلب الناس بتسأل أول سؤال AI هنا." } },
-  { name: "OpenCode", file: "opencode.svg", role: { en: "The terminal-native agent we install and run together during the workshop.", ar: "الـagent البنشتغل بيه في الترمنال خلال الورشة." } },
-  { name: "Cursor", file: "cursor.svg", role: { en: "An AI-native code editor. Same idea as VS Code, with chat and agents wired in.", ar: "محرر مدمج بـAI. نفس فكرة VS Code، مع شات و agents جوّاه." } },
-  { name: "Copilot", file: "copilot.svg", role: { en: "GitHub's inline completions — what AI-in-the-editor felt like first.", ar: "اقتراحات GitHub المباشرة — أول شكل لـAI داخل المحرر." } },
-  { name: "VS Code", file: "vscode.svg", role: { en: "The editor most beginners start in. Free and well-documented.", ar: "المحرر البيبدأ بيه أغلب المبتدئين. مجاني وموثّق." } },
-  { name: "Node.js", file: "node.svg", role: { en: "The JavaScript runtime that powers the portfolio project.", ar: "بيئة تشغيل JavaScript البتشغل مشروع البورتفوليو." } },
-  { name: "npm", file: "npm.svg", role: { en: "The package manager. We use it to install everything else.", ar: "مدير الحزم. بنستخدمه عشان نثبت بقية الأدوات." } },
-  { name: "GitHub", file: "github.svg", role: { en: "Where the code lives and where the site gets published from.", ar: "وين الكود بيتخزن، ومنه بنوصل لنشر الموقع." } },
+  {
+    name: "ChatGPT",
+    file: "openai.svg",
+    role: {
+      en: "The familiar starting point for questions, drafts, explanations, and quick checks.",
+      ar: "نقطة البداية المألوفة للأسئلة، المسودات، الشرح، والمراجعة السريعة.",
+    },
+  },
+  {
+    name: "Claude",
+    file: "claude.svg",
+    role: {
+      en: "Useful for careful reasoning, code review, long edits, and comparing answers.",
+      ar: "مفيد للتفكير الهادئ، مراجعة الكود، التعديلات الطويلة، ومقارنة الإجابات.",
+    },
+  },
+  {
+    name: "OpenCode",
+    file: "opencode.svg",
+    role: {
+      en: "The hands-on terminal agent we install and run together during the workshop.",
+      ar: "الـ agent العملي في الترمينال، بنثبته ونشغله مع بعض في الورشة.",
+    },
+  },
+  {
+    name: "Cursor",
+    file: "cursor.svg",
+    role: {
+      en: "An AI-native code editor, close to VS Code but with chat and agents wired in.",
+      ar: "محرر كود مدعوم بالـ AI، قريب من VS Code لكن فيه شات و agents جاهزة.",
+    },
+  },
+  {
+    name: "GitHub",
+    file: "github.svg",
+    role: {
+      en: "Where your code lives, gets reviewed, and can publish your portfolio.",
+      ar: "المكان البتخزن فيه الكود، تراجعه، ومنه ممكن تنشر البورتفوليو.",
+    },
+  },
+  {
+    name: "Node.js",
+    file: "node.svg",
+    role: {
+      en: "The JavaScript runtime behind the portfolio project and modern web tools.",
+      ar: "بيئة تشغيل JavaScript البتعتمد عليها أدوات الويب ومشروع البورتفوليو.",
+    },
+  },
 ];
 
 const copy = {
   en: {
-    badge: "Workshop · 26 May 2026",
-    titleA: "A beginner's",
-    titleAccent: "field guide",
-    titleB: "to working with AI in 2026.",
+    badge: "Live workshop · 26 May 2026",
+    heroKicker: "AI literacy for students",
+    title: "Your practical control room for AI in 2026.",
     intro:
-      "No prior coding required. In one workshop you'll set up your machine, learn how AI agents really work, and ship a small portfolio site you can show off.",
+      "A bilingual field guide for the workshop: understand agents, set up the right tools, practice safe workflows, and ship a small portfolio before the room goes quiet.",
     primary: "Start the guide",
-    secondary: "What is an agent?",
-    catalog: "Compare agent tools",
-    references: "Official references",
-    statOne: { v: "0", l: "lines of code required to start" },
-    statTwo: { v: "8", l: "lessons, English + Arabic" },
-    statThree: { v: "1", l: "deployed site you keep" },
-    asideLabel: "Live agent session",
-    asideCaption:
-      "What a real session looks like — a prompt, some thinking, three small tool calls, a green checkmark.",
-    chapter1: "Chapter one",
-    section1Eyebrow: "Tools you'll meet",
-    section1Title: "The actual tools used in this workshop.",
-    section1Lede:
-      "Not a generic AI showcase. Every name below is something you'll click, install, or chat with during the session — not a logo wall for decoration.",
-    chapter2: "Chapter two",
-    section2Eyebrow: "By the end of the day",
-    section2Title: "Three things you walk out with.",
-    builds: [
+    secondary: "Preview the agent loop",
+    meta: ["No coding background", "Arabic + English", "Laptop-first"],
+    artifactTitle: "Workshop run",
+    artifactSubtitle: "May 26 · student mode",
+    promptLabel: "student prompt",
+    prompt:
+      "I want to build a portfolio with AI, but I do not know what to install first.",
+    agentReply:
+      "We will map the tools, install the basics, run OpenCode, review each diff, then deploy the result.",
+    runStatus: "ready for the first lesson",
+    signal: "Agent workflow preview",
+    reactionsTitle: "Built for the questions students actually ask",
+    reactionsLead:
+      "The guide is shaped around the confusion points that appear in the first hour: which tool to trust, what an agent can change, where secrets belong, and how to know when to stop.",
+    reactions: [
       {
-        t: "A working AI setup",
-        d: "Node, npm, an editor, and OpenCode installed and tested on your own laptop. Not a borrowed machine, not a sandbox in a tab. Yours.",
+        handle: "Before setup",
+        text: "What is the difference between ChatGPT, Cursor, Claude, and OpenCode?",
       },
       {
-        t: "A real conversation with an agent",
-        d: "You'll write a prompt, watch a tool call run, review a diff, and decide whether to accept or push back. The same loop you'll use forever.",
+        handle: "During practice",
+        text: "If the agent wants to run a command, how do I know it is safe?",
       },
       {
-        t: "A live portfolio URL",
-        d: "Your name, your projects, deployed to the open web with a free hosting provider. A link you can drop into a CV the same evening.",
+        handle: "After shipping",
+        text: "How do I keep the site online and update it without breaking it?",
       },
     ],
-    chapter3: "Chapter three",
-    section3Eyebrow: "The path",
-    section3Title: "Eight short lessons, one clear arc.",
-    section3Lede:
-      "Each one is built to be read in under twenty minutes. The first two are live; the rest unlock as the workshop runs.",
-    chapter4: "A short detour",
-    section4Eyebrow: "Safety, not theatre",
-    section4Title: "Three rules we keep coming back to.",
+    toolsEyebrow: "Toolchain",
+    toolsTitle: "Bring the tools you already recognize. Learn where each one belongs.",
+    toolsLead:
+      "This is not a logo wall. Every tool below has a job in the workshop, from asking the first question to deploying the final portfolio.",
+    outcomesEyebrow: "End state",
+    outcomesTitle: "One afternoon, three concrete wins.",
+    outcomes: [
+      {
+        icon: Wrench,
+        title: "A working local setup",
+        text: "Node, npm, an editor, GitHub basics, and OpenCode installed on your own laptop.",
+      },
+      {
+        icon: Network,
+        title: "A real agent loop",
+        text: "Prompt, inspect, tool call, diff review, fix, verify. You see the loop before you trust it.",
+      },
+      {
+        icon: Laptop,
+        title: "A live portfolio URL",
+        text: "A small personal site deployed online, with a clear path for future updates.",
+      },
+    ],
+    pathEyebrow: "Lesson path",
+    pathTitle: "Eight short lessons, one clear arc.",
+    pathLead:
+      "The sequence moves from orientation to setup, then hands-on agent work, safety, and deployment.",
+    safetyEyebrow: "Safety layer",
+    safetyTitle: "The agent does the work. You keep judgment in the loop.",
+    safetyLead:
+      "Speed is only useful when the student still understands what changed.",
     safety: [
-      {
-        lead: "Never paste secrets.",
-        rest: "API keys, tokens, and .env files don't go in chats, screenshots, or commits. Treat them the way you'd treat a house key.",
-      },
-      {
-        lead: "Read before you run.",
-        rest: "If an agent asks to run a command, read what it does first. Pause and ask. Curiosity is faster than recovery.",
-      },
-      {
-        lead: "You own the decision.",
-        rest: "Agents move fast. Your job is to keep judgment in the loop — the diff is just a suggestion until you accept it.",
-      },
+      "Never paste API keys, tokens, or .env files into chats or screenshots.",
+      "Read terminal commands before you run them. Curiosity is cheaper than recovery.",
+      "Treat every diff as a proposal until you accept it.",
     ],
-    pullQuote:
-      "Use agents to move faster, not to stop thinking.",
-    pullQuoteAttribution: "— the rule that runs through every lesson",
-    chapter5: "Before you sign up",
-    section5Eyebrow: "First questions",
-    section5Title: "Things students ask before they show up.",
-    faqs: [
-      {
-        q: "Do I need to know programming?",
-        a: "No. We start from a clean laptop and build up. If you've used a browser and a text editor, you have enough to follow along.",
-      },
-      {
-        q: "Which AI tool will we actually use?",
-        a: "OpenCode in the terminal as the hands-on agent. Claude and ChatGPT come up as comparison points and helpers, but you don't need a paid account for either.",
-      },
-      {
-        q: "Is the workshop in Arabic or English?",
-        a: "Both. The site has a language switch at the top, and the live session moves between Arabic and English depending on the room.",
-      },
-      {
-        q: "What do I need to bring?",
-        a: "A laptop with Windows, macOS, or Linux. Admin rights so you can install software. A stable internet connection. That's it.",
-      },
-    ],
-    sessionLabels: {
-      youSay: "you",
-      agentSay: "agent",
-      thinking: "thinking",
-      read: "Read",
-      edit: "Edit",
-      bash: "Bash",
-      prompt: "build me a portfolio site with my name",
-      reply: "I'll start by reading your project layout.",
-      cmd: "pnpm dev",
-      ok: "ready on http://localhost:3000",
-      file: "app/page.tsx",
-    },
+    finalTitle: "Start with the map, then build the thing.",
+    finalLead:
+      "The first lesson gives students a clean mental model before the workshop moves into installs and hands-on agent work.",
+    finalCta: "Open lesson one",
+    soon: "soon",
+    min: "min",
+    lessonCount: (ready: number, total: number) => `${ready}/${total} lessons ready`,
   },
   ar: {
-    badge: "ورشة · 26 مايو 2026",
-    titleA: "دليل ميداني",
-    titleAccent: "للمبتدئين",
-    titleB: "للشغل مع AI في 2026.",
+    badge: "ورشة مباشرة · 26 مايو 2026",
+    heroKicker: "AI literacy للطلاب",
+    title: "غرفة تحكم عملية لفهم AI في 2026.",
     intro:
-      "ما محتاج تعرف برمجة. في ورشة واحدة بتجهز لابتوبك، بتفهم الـ agents بصورة حقيقية، وبتطلع بموقع بورتفوليو صغير بتقدر تعرضه لأي زول.",
+      "دليل ثنائي اللغة للورشة: تفهم الـ agents، تجهز الأدوات الصح، تتدرب على شغل آمن، وتطلع ببورتفوليو صغير قبل نهاية اليوم.",
     primary: "ابدأ الدليل",
-    secondary: "شنو الـagent؟",
-    catalog: "قارن أدوات الـ agents",
-    references: "المراجع الرسمية",
-    statOne: { v: "0", l: "سطر كود مطلوب في البداية" },
-    statTwo: { v: "8", l: "دروس، إنجليزي + عربي" },
-    statThree: { v: "1", l: "موقع منشور يخصك" },
-    asideLabel: "جلسة agent حية",
-    asideCaption:
-      "شكل الجلسة الحقيقية — prompt، شوية تفكير، ثلاث tool calls صغار، وعلامة ✓ خضراء.",
-    chapter1: "الفصل الأول",
-    section1Eyebrow: "الأدوات",
-    section1Title: "الأدوات الفعلية في هذي الورشة.",
-    section1Lede:
-      "ما عرض عام لأدوات AI. كل اسم تحت دا حاجة بتضغط عليها، بتثبتها، أو بتكلمها في الجلسة — مش جدار شعارات للزينة.",
-    chapter2: "الفصل الثاني",
-    section2Eyebrow: "بتطلع بشنو؟",
-    section2Title: "ثلاث حاجات بتطلع بيهن.",
-    builds: [
+    secondary: "شوف لوب الـ agent",
+    meta: ["ما محتاج خبرة برمجة", "عربي + إنجليزي", "على لابتوبك"],
+    artifactTitle: "مسار الورشة",
+    artifactSubtitle: "26 مايو · وضع الطالب",
+    promptLabel: "سؤال الطالب",
+    prompt: "عايز أبني بورتفوليو بالـ AI، لكن ما عارف أثبت شنو أول.",
+    agentReply:
+      "حنرتب الأدوات، نثبت الأساسيات، نشغل OpenCode، نراجع كل diff، وبعدها ننشر النتيجة.",
+    runStatus: "جاهز للدرس الأول",
+    signal: "معاينة شغل الـ agent",
+    reactionsTitle: "مصمم حول الأسئلة البتظهر فعلا في القاعة",
+    reactionsLead:
+      "الدليل بيركز على نقاط اللخبطة في أول ساعة: أثق في ياتو أداة، الـ agent ممكن يغير شنو، الأسرار مكانها وين، وأعرف أوقف متين.",
+    reactions: [
       {
-        t: "بيئة AI شغّالة",
-        d: "Node و npm ومحرر و OpenCode مثبتين ومجربين على لابتوبك انت. مش لابتوب مستعار، ولا sandbox في تبويب. لابتوبك.",
+        handle: "قبل التجهيز",
+        text: "الفرق شنو بين ChatGPT و Cursor و Claude و OpenCode؟",
       },
       {
-        t: "محادثة حقيقية مع agent",
-        d: "بتكتب prompt، بتشوف tool call بتشتغل، بتراجع diff، وبتقرر تقبل أو ترفض. نفس اللوب البتستعمله طول العمر.",
+        handle: "أثناء التطبيق",
+        text: "لو الـ agent طلب يشغل أمر، أعرف إنه آمن كيف؟",
       },
       {
-        t: "رابط بورتفوليو حي",
-        d: "اسمك ومشاريعك، منشورين على الإنترنت من استضافة مجانية. لينك تقدر تحطه في CV في نفس الليلة.",
+        handle: "بعد النشر",
+        text: "أخلي الموقع شغال وأحدثه بدون ما أكسره كيف؟",
       },
     ],
-    chapter3: "الفصل الثالث",
-    section3Eyebrow: "المسار",
-    section3Title: "ثمانية دروس قصيرة، قصة واحدة.",
-    section3Lede:
-      "كل درس مكتوب عشان يتقرى في أقل من عشرين دقيقة. الدرسين الأول جاهزين، والباقي بيفتح مع تقدم الورشة.",
-    chapter4: "وقفة قصيرة",
-    section4Eyebrow: "أمان حقيقي مش مسرحية",
-    section4Title: "ثلاث قواعد بنرجع ليها دايماً.",
+    toolsEyebrow: "الأدوات",
+    toolsTitle: "ابدأ بالأدوات البتعرفها. واتعلم مكان كل واحدة.",
+    toolsLead:
+      "دي ما لوحة شعارات. كل أداة تحت عندها دور في الورشة، من أول سؤال لحد نشر البورتفوليو.",
+    outcomesEyebrow: "النهاية",
+    outcomesTitle: "عصر واحد، ثلاث نتائج واضحة.",
+    outcomes: [
+      {
+        icon: Wrench,
+        title: "تجهيز محلي شغال",
+        text: "Node و npm ومحرر و GitHub و OpenCode مثبتين على لابتوبك.",
+      },
+      {
+        icon: Network,
+        title: "لوب agent حقيقي",
+        text: "Prompt، فحص، tool call، مراجعة diff، إصلاح، تحقق. تشوف اللوب قبل ما تثق فيه.",
+      },
+      {
+        icon: Laptop,
+        title: "رابط بورتفوليو منشور",
+        text: "موقع شخصي صغير على الإنترنت، ومعاه طريق واضح للتحديثات الجاية.",
+      },
+    ],
+    pathEyebrow: "مسار الدروس",
+    pathTitle: "ثمانية دروس قصيرة، قصة واحدة واضحة.",
+    pathLead:
+      "المسار يبدأ بفهم الصورة، بعدها التجهيز، ثم تطبيق الـ agent، الأمان، والنشر.",
+    safetyEyebrow: "طبقة الأمان",
+    safetyTitle: "الـ agent يعمل بسرعة. إنت تخلي القرار في اللوب.",
+    safetyLead: "السرعة مفيدة بس لما الطالب لسه فاهم الحصل شنو.",
     safety: [
-      {
-        lead: "ما تلصق أسرار.",
-        rest: "API keys و tokens وملفات .env ما بتجي في الشات ولا الصور ولا الـ commits. تعامل معاهن زي مفتاح البيت.",
-      },
-      {
-        lead: "اقرأ قبل ما تشغّل.",
-        rest: "لو الـ agent طلب يشغل أمر، اقرى شنو بيسوي الأول. وقّف واسأل. الفضول أسرع من الإصلاح.",
-      },
-      {
-        lead: "القرار قرارك.",
-        rest: "الـ agents بتمشي بسرعة. شغلك انت تخلي الحكم في اللوب — الـ diff اقتراح لحدي ما تقبله.",
-      },
+      "ما تلصق API keys أو tokens أو ملفات .env في الشات أو الصور.",
+      "اقرأ أوامر الترمينال قبل تشغيلها. الفضول أرخص من الإصلاح.",
+      "اعتبر أي diff اقتراح لحد ما تقبله بنفسك.",
     ],
-    pullQuote: "استخدم الـ agents عشان تمشي أسرع، ما عشان تبطل تفكر.",
-    pullQuoteAttribution: "— القاعدة البتمشي معاك في كل درس",
-    chapter5: "قبل ما تسجل",
-    section5Eyebrow: "أسئلة البداية",
-    section5Title: "الأسئلة البتجي قبل ما تسجل.",
-    faqs: [
-      {
-        q: "لازم أعرف برمجة؟",
-        a: "لا. بنبدأ من لابتوب فاضي وبنبني خطوة خطوة. لو تعرف تستخدم متصفح ومحرر نصوص، انت تمام.",
-      },
-      {
-        q: "أداة AI شنو الح نستعملها؟",
-        a: "OpenCode في الترمنال كـagent عملي. Claude و ChatGPT بيظهروا كنقاط مقارنة، وما محتاج اشتراك مدفوع لأي منهم.",
-      },
-      {
-        q: "الورشة عربي والا إنجليزي؟",
-        a: "الاتنين. الموقع فيه زر للغة فوق، والجلسة الحية بتلف بين العربي والإنجليزي حسب الحضور.",
-      },
-      {
-        q: "أجيب شنو معاي؟",
-        a: "لابتوب ويندوز أو ماك أو لينكس. صلاحيات تثبيت برامج. إنترنت ثابتة. وبس.",
-      },
-    ],
-    sessionLabels: {
-      youSay: "انت",
-      agentSay: "الوكيل",
-      thinking: "بفكر",
-      read: "قراءة",
-      edit: "تعديل",
-      bash: "أمر",
-      prompt: "ابني لي بورتفوليو فيه اسمي",
-      reply: "حقرى هيكل المشروع الأول.",
-      cmd: "pnpm dev",
-      ok: "جاهز على http://localhost:3000",
-      file: "app/page.tsx",
-    },
+    finalTitle: "ابدأ بالخريطة، وبعدها ابن الحاجة.",
+    finalLead:
+      "الدرس الأول بيدي الطلاب نموذج واضح قبل ما الورشة تدخل في التثبيت والشغل العملي مع الـ agents.",
+    finalCta: "افتح الدرس الأول",
+    soon: "قريبا",
+    min: "د",
+    lessonCount: (ready: number, total: number) => `${ready}/${total} دروس جاهزة`,
   },
 } as const;
 
-function HandUnderline({ className = "" }: { className?: string }) {
+function HeroConstellation() {
   return (
-    <svg
-      aria-hidden
-      viewBox="0 0 220 14"
-      preserveAspectRatio="none"
-      className={`pointer-events-none absolute inset-x-0 -bottom-1 h-[0.4em] w-full ${className}`}
-    >
-      <path
-        d="M2 9 C 40 2, 80 12, 120 6 S 200 4, 218 8"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="3"
-        strokeLinecap="round"
-        className="hand-underline-path"
-      />
-    </svg>
+    <div className="absolute inset-0 overflow-hidden" aria-hidden>
+      <div className="ai-grid" />
+      <div className="float-chip chip-claude">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img className="tool-logo" src="/tools/claude.svg" alt="" width={30} height={30} />
+      </div>
+      <div className="float-chip chip-openai">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img className="tool-logo" src="/tools/openai.svg" alt="" width={30} height={30} />
+      </div>
+      <div className="float-chip chip-opencode">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img className="tool-logo" src="/tools/opencode.svg" alt="" width={30} height={30} />
+      </div>
+      <div className="float-chip chip-cursor">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img className="tool-logo" src="/tools/cursor.svg" alt="" width={30} height={30} />
+      </div>
+    </div>
   );
 }
 
-function AgentSession({ locale }: { locale: Locale }) {
-  const t = copy[locale].sessionLabels;
+function WorkshopArtifact({ locale }: { locale: Locale }) {
+  const text = copy[locale];
+
   return (
-    <figure className="agent-figure relative" dir="ltr">
-      <div className="agent-window">
-        <div className="agent-titlebar">
-          <span className="flex gap-1.5">
-            <span className="size-3 rounded-full bg-[#ff5f56]" />
-            <span className="size-3 rounded-full bg-[#ffbd2e]" />
-            <span className="size-3 rounded-full bg-[#27c93f]" />
-          </span>
-          <span className="font-mono text-[11px] text-muted-foreground tracking-tight">
-            ~ / portfolio / {t.file}
-          </span>
-          <span className="ml-auto inline-flex items-center">
-            <span className="size-1.5 rounded-full bg-emerald-500 agent-pulse-dot" />
-          </span>
-        </div>
+    <div className="hero-artifact mx-auto w-full max-w-4xl" dir="ltr">
+      <div className="artifact-topbar">
+        <span className="flex gap-1.5">
+          <span className="size-2.5 rounded-full bg-[oklch(0.68_0.2_25)]" />
+          <span className="size-2.5 rounded-full bg-[color:var(--site-accent-2)]" />
+          <span className="size-2.5 rounded-full bg-[color:var(--site-good)]" />
+        </span>
+        <span className="font-mono text-[11px] text-foreground/72">
+          ai-seminar / workshop-control
+        </span>
+        <span className="ms-auto rounded-full border border-foreground/10 px-2 py-0.5 text-[10px] uppercase tracking-[0.18em] text-foreground/60">
+          live
+        </span>
+      </div>
+      <div className="grid gap-0 md:grid-cols-[15rem_1fr]">
+        <aside className="artifact-sidebar">
+          <div className="mb-5">
+            <p className="text-[11px] uppercase tracking-[0.2em] text-foreground/45">
+              {text.artifactTitle}
+            </p>
+            <p className="mt-1 text-sm font-medium text-foreground/88">
+              {text.artifactSubtitle}
+            </p>
+          </div>
+          {[
+            ["01", "orientation", BookOpen],
+            ["02", "setup", Wrench],
+            ["03", "agent loop", Cpu],
+            ["04", "deploy", GitBranch],
+          ].map(([n, label, Icon]) => (
+            <div key={label as string} className="artifact-nav-row">
+              <Icon className="size-3.5" />
+              <span>{n as string}</span>
+              <span>{label as string}</span>
+            </div>
+          ))}
+        </aside>
+        <div className="artifact-main">
+          <div className="mb-4 flex items-center justify-between gap-4">
+            <div>
+              <p className="text-[11px] uppercase tracking-[0.22em] text-cyan-200/75">
+                {text.signal}
+              </p>
+              <h2 className="mt-1 text-xl font-semibold tracking-tight text-[color:var(--site-strong)]">
+                prompt → inspect → edit → verify
+              </h2>
+            </div>
+            <Button
+              render={<Link href={`/${locale}/learn/agents`} />}
+              nativeButton={false}
+              size="sm"
+              className="hidden bg-[color:var(--site-strong)] text-[color:var(--site-bg)] hover:bg-[color:var(--site-accent)] md:inline-flex"
+            >
+              <Play data-icon="inline-start" />
+              {text.secondary}
+            </Button>
+          </div>
 
-        <div className="agent-body">
-          <div className="agent-step" style={{ animationDelay: "120ms" }}>
-            <div className="agent-role">{t.youSay}</div>
-            <div className="mt-1.5 flex items-center gap-1">
-              <span
-                className="agent-type whitespace-nowrap font-mono text-sm"
-                dir={locale === "ar" ? "rtl" : "ltr"}
-              >
-                {t.prompt}
-              </span>
-              <span className="agent-caret inline-block h-4 w-[7px] bg-foreground/80" />
+          <div className="artifact-chat">
+            <div className="artifact-message">
+              <span className="artifact-message-label">{text.promptLabel}</span>
+              <p dir={locale === "ar" ? "rtl" : "ltr"}>{text.prompt}</p>
+            </div>
+            <div className="artifact-message artifact-message-agent">
+              <span className="artifact-message-label">agent</span>
+              <p dir={locale === "ar" ? "rtl" : "ltr"}>{text.agentReply}</p>
             </div>
           </div>
 
-          <div className="agent-step" style={{ animationDelay: "1200ms" }}>
-            <div className="agent-role">{t.agentSay}</div>
-            <div className="mt-1.5 flex items-center gap-2 text-muted-foreground">
-              <span className="agent-dots inline-flex gap-1">
-                <span className="size-1.5 rounded-full bg-current" />
-                <span className="size-1.5 rounded-full bg-current" />
-                <span className="size-1.5 rounded-full bg-current" />
-              </span>
-              <span className="font-mono text-xs">{t.thinking}…</span>
-            </div>
-            <p className="mt-2 text-sm leading-6 text-foreground">{t.reply}</p>
+          <div className="artifact-files">
+            {[
+              ["install", "node --version", "ok"],
+              ["read", "content/lessons/welcome.mdx", "ok"],
+              ["edit", "app/portfolio/page.tsx", "+124"],
+              ["verify", "pnpm build", "ok"],
+            ].map(([kind, name, status]) => (
+              <div key={name} className="artifact-file-row">
+                <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-foreground/42">
+                  {kind}
+                </span>
+                <span className="truncate font-mono text-xs text-foreground/78">
+                  {name}
+                </span>
+                <span className="ms-auto text-xs text-emerald-200">{status}</span>
+              </div>
+            ))}
           </div>
 
-          <div className="agent-step" style={{ animationDelay: "2200ms" }}>
-            <div className="agent-tool agent-tool-read">
-              <div className="agent-tool-head">
-                <span className="agent-tool-icon">●</span>
-                <span>{t.read}</span>
-              </div>
-              <div className="agent-tool-body font-mono text-xs">
-                app/page.tsx <span className="text-muted-foreground">· 142 lines</span>
-              </div>
-            </div>
-          </div>
-
-          <div className="agent-step" style={{ animationDelay: "3000ms" }}>
-            <div className="agent-tool agent-tool-edit">
-              <div className="agent-tool-head">
-                <span className="agent-tool-icon">✎</span>
-                <span>{t.edit}</span>
-              </div>
-              <div className="agent-tool-body space-y-1 font-mono text-xs">
-                <div className="agent-diff-del">
-                  - &lt;h1&gt;Default header&lt;/h1&gt;
-                </div>
-                <div className="agent-diff-add">
-                  + &lt;h1&gt;Hi, I&apos;m {locale === "ar" ? "خليل" : "Khalil"}&lt;/h1&gt;
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div className="agent-step" style={{ animationDelay: "3800ms" }}>
-            <div className="agent-tool agent-tool-bash">
-              <div className="agent-tool-head">
-                <span className="agent-tool-icon">$</span>
-                <span>{t.bash}</span>
-              </div>
-              <div className="agent-tool-body space-y-1 font-mono text-xs">
-                <div className="text-foreground">$ {t.cmd}</div>
-                <div className="agent-ok">
-                  <span>✓</span>
-                  <span>{t.ok}</span>
-                </div>
-              </div>
-            </div>
+          <div className="mt-5 flex flex-wrap items-center gap-3 text-xs text-foreground/62">
+            <span className="inline-flex items-center gap-2 text-emerald-200">
+              <Check className="size-3.5" />
+              {text.runStatus}
+            </span>
+            <span className="hidden h-px w-8 bg-foreground/14 sm:block" />
+            <span>localhost:3000</span>
           </div>
         </div>
       </div>
-    </figure>
+    </div>
+  );
+}
+
+function SectionHeader({
+  eyebrow,
+  title,
+  lead,
+}: {
+  eyebrow: string;
+  title: string;
+  lead?: string;
+}) {
+  return (
+    <header className="mx-auto max-w-3xl text-center">
+      <p className="text-[11px] uppercase tracking-[0.28em] text-[color:var(--site-accent)]">
+        {eyebrow}
+      </p>
+      <h2 className="mt-4 text-balance text-3xl font-semibold leading-[1.06] tracking-[-0.045em] text-[color:var(--site-strong)] md:text-5xl">
+        {title}
+      </h2>
+      {lead ? (
+        <p className="mx-auto mt-4 max-w-2xl text-pretty text-sm leading-7 text-[color:var(--site-muted)] md:text-base">
+          {lead}
+        </p>
+      ) : null}
+    </header>
   );
 }
 
@@ -349,234 +403,237 @@ export default async function LocaleHome({
   const text = copy[locale];
 
   return (
-    <CourseShell locale={locale}>
-      <article className="flex flex-col gap-32 pb-20">
-        <section className="relative grid items-start gap-14 pt-2 lg:grid-cols-[0.95fr_1.05fr]">
-          <div className="relative flex flex-col gap-8">
-            <div className="flex items-center gap-3 text-xs uppercase tracking-[0.22em] text-muted-foreground">
-              <span className="h-px w-8 bg-current opacity-50" />
+    <CourseShell locale={locale} variant="landing">
+      <article className="landing-page relative overflow-hidden rounded-b-[2rem]">
+        <section className="hero-section relative min-h-[calc(100svh-5rem)] px-4 pb-20 pt-16 sm:px-6 lg:px-8">
+          <HeroConstellation />
+          <div className="relative z-1 mx-auto flex max-w-6xl flex-col items-center text-center">
+            <p className="inline-flex items-center gap-2 rounded-full border border-foreground/10 bg-foreground/[0.03] px-3 py-1 text-[11px] uppercase tracking-[0.22em] text-[color:var(--site-accent-2)]">
+              <span className="size-1.5 rounded-full bg-[color:var(--site-accent-2)]" />
               {text.badge}
-            </div>
-            <h1 className="max-w-3xl text-[clamp(2.6rem,6vw,5.4rem)] font-semibold leading-[1.12] tracking-[0.005em] [font-variant-ligatures:none]">
-              {text.titleA}{" "}
-              <span className="relative inline-block whitespace-nowrap text-foreground pb-2">
-                <span className="relative z-1">{text.titleAccent}</span>
-                <HandUnderline className="text-[color:var(--chart-4)]" />
-              </span>{" "}
-              {text.titleB}
+            </p>
+            <p className="mt-8 text-sm font-medium text-[color:var(--site-muted)]">
+              {text.heroKicker}
+            </p>
+            <h1 className="mt-4 max-w-5xl text-balance text-[clamp(3.1rem,9vw,7.4rem)] font-semibold leading-[0.88] tracking-[-0.075em] text-[color:var(--site-strong)]">
+              {text.title}
             </h1>
-            <p className="max-w-xl text-lg leading-8 text-muted-foreground">
+            <p className="mt-7 max-w-2xl text-pretty text-base leading-7 text-[color:var(--site-muted)] md:text-lg">
               {text.intro}
             </p>
-            <div className="flex flex-wrap items-center gap-5">
-              <Button render={<Link href={`/${locale}/learn/welcome`} />} nativeButton={false} size="lg">
-                {text.primary} →
+            <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
+              <Button
+                render={<Link href={`/${locale}/learn/welcome`} />}
+                nativeButton={false}
+                size="lg"
+                className="h-11 rounded-xl bg-[color:var(--site-strong)] px-4 text-[color:var(--site-bg)] hover:bg-[color:var(--site-accent)]"
+              >
+                <GraduationCap data-icon="inline-start" />
+                {text.primary}
+                <ArrowRight data-icon="inline-end" />
               </Button>
-              <Link
-                href={`/${locale}/learn/agents`}
-                className="text-sm underline decoration-muted-foreground/40 decoration-1 underline-offset-[6px] hover:decoration-foreground"
+              <Button
+                render={<Link href={`/${locale}/learn/agents`} />}
+                nativeButton={false}
+                variant="outline"
+                size="lg"
+                className="h-11 rounded-xl border-foreground/10 bg-foreground/[0.03] px-4 text-[color:var(--site-strong)] hover:bg-foreground/[0.07]"
               >
+                <Terminal data-icon="inline-start" />
                 {text.secondary}
-              </Link>
-              <Link
-                href={`/${locale}/agents`}
-                className="text-sm underline decoration-muted-foreground/40 decoration-1 underline-offset-[6px] hover:decoration-foreground"
-              >
-                {text.catalog}
-              </Link>
-              <Link
-                href={`/${locale}/references`}
-                className="text-sm underline decoration-muted-foreground/40 decoration-1 underline-offset-[6px] hover:decoration-foreground"
-              >
-                {text.references}
-              </Link>
+              </Button>
             </div>
-            <div className="mt-2 grid max-w-xl grid-cols-3 gap-x-8">
-              {[text.statOne, text.statTwo, text.statThree].map((s) => (
-                <div key={s.l}>
-                  <div className="text-4xl font-semibold tracking-[-0.04em] text-foreground">{s.v}</div>
-                  <div className="mt-1 text-xs leading-snug text-muted-foreground">{s.l}</div>
+            <div className="mt-6 flex flex-wrap justify-center gap-x-5 gap-y-2 text-xs text-[color:var(--site-muted)]">
+              {text.meta.map((item) => (
+                <span key={item} className="inline-flex items-center gap-2">
+                  <Check className="size-3.5 text-[color:var(--site-good)]" />
+                  {item}
+                </span>
+              ))}
+            </div>
+            <div className="mt-14 w-full">
+              <WorkshopArtifact locale={locale} />
+            </div>
+          </div>
+        </section>
+
+        <section className="relative border-t border-foreground/[0.07] px-4 py-24 sm:px-6 lg:px-8">
+          <div className="mx-auto grid max-w-6xl gap-10 lg:grid-cols-[0.9fr_1.4fr] lg:items-end">
+            <div>
+              <p className="text-[11px] uppercase tracking-[0.28em] text-[color:var(--site-accent-2)]">
+                field notes
+              </p>
+              <h2 className="mt-4 max-w-xl text-balance text-3xl font-semibold leading-[1.04] tracking-[-0.045em] text-[color:var(--site-strong)] md:text-5xl">
+                {text.reactionsTitle}
+              </h2>
+              <p className="mt-5 max-w-xl text-sm leading-7 text-[color:var(--site-muted)]">
+                {text.reactionsLead}
+              </p>
+            </div>
+            <div className="question-marquee" aria-label={text.reactionsTitle}>
+              {[...text.reactions, ...text.reactions].map((item, index) => (
+                <div key={`${item.handle}-${index}`} className="question-card">
+                  <p className="text-[11px] uppercase tracking-[0.22em] text-[color:var(--site-accent)]">
+                    {item.handle}
+                  </p>
+                  <p className="mt-3 text-sm leading-6 text-[color:var(--site-strong)]">
+                    {item.text}
+                  </p>
                 </div>
               ))}
             </div>
           </div>
-
-          <aside className="relative pt-4 lg:pt-12">
-            <AgentSession locale={locale} />
-          </aside>
         </section>
 
-        <section className="grid gap-12 lg:grid-cols-[12rem_1fr]">
-          <header className="lg:sticky lg:top-32 lg:self-start">
-            <div className="text-xs uppercase tracking-[0.22em] text-muted-foreground">{text.chapter1}</div>
-            <div className="mt-1 text-xs font-medium text-foreground/70">{text.section1Eyebrow}</div>
-          </header>
-          <div className="max-w-4xl">
-            <h2 className="text-3xl font-semibold leading-tight tracking-tight md:text-[2.5rem]">
-              {text.section1Title}
-            </h2>
-            <p className="mt-4 max-w-3xl text-base leading-7 text-muted-foreground">
-              {text.section1Lede}
-            </p>
-            <ul className="mt-10 flex flex-col">
-              {tools.map((tool, i) => (
-                <li
-                  key={tool.name}
-                  className="group flex items-start gap-5 border-t border-dashed border-foreground/20 dark:border-foreground/25 py-6 first:border-t-0 first:pt-0"
-                >
-                  <span className="mt-0.5 hidden w-8 text-xs font-mono text-muted-foreground sm:block">
-                    {String(i + 1).padStart(2, "0")}
-                  </span>
+        <section className="relative border-t border-foreground/[0.07] px-4 py-24 sm:px-6 lg:px-8">
+          <div className="mx-auto max-w-6xl">
+            <SectionHeader
+              eyebrow={text.toolsEyebrow}
+              title={text.toolsTitle}
+              lead={text.toolsLead}
+            />
+            <div className="tool-strip mt-12">
+              {tools.map((tool) => (
+                <div key={tool.name} className="tool-cell">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src={`/tools/${tool.file}`}
-                    alt=""
-                    width={28}
-                    height={28}
-                    className="mt-0.5 size-7 shrink-0 object-contain"
-                  />
-                  <div className="flex-1">
-                    <span className="font-semibold tracking-tight">{tool.name}</span>
-                    <span className="ms-2 text-muted-foreground">— {tool.role[locale]}</span>
+                  <img className="tool-logo" src={`/tools/${tool.file}`} alt="" width={26} height={26} />
+                  <div>
+                    <h3 className="text-sm font-semibold text-[color:var(--site-strong)]">
+                      {tool.name}
+                    </h3>
+                    <p className="mt-1 text-xs leading-5 text-[color:var(--site-muted)]">
+                      {tool.role[locale]}
+                    </p>
                   </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section className="relative border-t border-foreground/[0.07] px-4 py-24 sm:px-6 lg:px-8">
+          <div className="mx-auto grid max-w-6xl gap-12 lg:grid-cols-[1fr_1.15fr] lg:items-center">
+            <div>
+              <p className="text-[11px] uppercase tracking-[0.28em] text-[color:var(--site-accent-2)]">
+                {text.outcomesEyebrow}
+              </p>
+              <h2 className="mt-4 text-balance text-3xl font-semibold leading-[1.04] tracking-[-0.045em] text-[color:var(--site-strong)] md:text-5xl">
+                {text.outcomesTitle}
+              </h2>
+            </div>
+            <div className="outcome-stack">
+              {text.outcomes.map((outcome, index) => {
+                const Icon = outcome.icon;
+                return (
+                  <div key={outcome.title} className="outcome-row">
+                    <span className="font-mono text-xs text-[color:var(--site-faint)]">
+                      {String(index + 1).padStart(2, "0")}
+                    </span>
+                    <Icon className="size-5 text-[color:var(--site-good)]" />
+                    <div>
+                      <h3 className="text-lg font-semibold tracking-tight text-[color:var(--site-strong)]">
+                        {outcome.title}
+                      </h3>
+                      <p className="mt-2 text-sm leading-6 text-[color:var(--site-muted)]">
+                        {outcome.text}
+                      </p>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </section>
+
+        <section className="relative border-t border-foreground/[0.07] px-4 py-24 sm:px-6 lg:px-8">
+          <div className="mx-auto max-w-6xl">
+            <SectionHeader
+              eyebrow={text.pathEyebrow}
+              title={text.pathTitle}
+              lead={text.pathLead}
+            />
+            <ol className="lesson-board mt-12">
+              {lessons.map((lesson, index) => {
+                const ready = lesson.status === "ready";
+                return (
+                  <li key={lesson.slug}>
+                    <Link
+                      href={ready ? `/${locale}/learn/${lesson.slug}` : `/${locale}`}
+                      className="lesson-row"
+                      aria-disabled={!ready}
+                    >
+                      <span className="font-mono text-xs text-[color:var(--site-faint)]">
+                        {String(index + 1).padStart(2, "0")}
+                      </span>
+                      <span className="lesson-icon">
+                        {ready ? <FileCode2 className="size-4" /> : <LockKeyhole className="size-4" />}
+                      </span>
+                      <span className="min-w-0">
+                        <span className="block truncate text-base font-semibold tracking-tight text-[color:var(--site-strong)]">
+                          {lesson.title[locale]}
+                        </span>
+                        <span className="mt-1 line-clamp-2 text-sm leading-6 text-[color:var(--site-muted)]">
+                          {lesson.summary[locale]}
+                        </span>
+                      </span>
+                      <span className="ms-auto whitespace-nowrap text-xs text-[color:var(--site-muted)]">
+                        {ready ? `${lesson.minutes} ${text.min}` : text.soon}
+                      </span>
+                      <ChevronRight className="size-4 text-[color:var(--site-faint)]" />
+                    </Link>
+                  </li>
+                );
+              })}
+            </ol>
+            <p className="mt-5 text-center text-xs text-[color:var(--site-faint)]">
+              {text.lessonCount(readyLessons.length, lessons.length)}
+            </p>
+          </div>
+        </section>
+
+        <section className="relative border-t border-foreground/[0.07] px-4 py-24 sm:px-6 lg:px-8">
+          <div className="mx-auto grid max-w-6xl gap-12 lg:grid-cols-[1.05fr_0.95fr] lg:items-center">
+            <div className="safety-panel">
+              <p className="text-[11px] uppercase tracking-[0.28em] text-[color:var(--site-accent-2)]">
+                {text.safetyEyebrow}
+              </p>
+              <h2 className="mt-4 text-balance text-3xl font-semibold leading-[1.04] tracking-[-0.045em] text-[color:var(--site-strong)] md:text-5xl">
+                {text.safetyTitle}
+              </h2>
+              <p className="mt-5 max-w-xl text-sm leading-7 text-[color:var(--site-muted)]">
+                {text.safetyLead}
+              </p>
+            </div>
+            <ul className="safety-list">
+              {text.safety.map((item, index) => (
+                <li key={item}>
+                  <span className="font-mono text-xs text-[color:var(--site-accent-2)]">
+                    rule {String(index + 1).padStart(2, "0")}
+                  </span>
+                  <p>{item}</p>
                 </li>
               ))}
             </ul>
           </div>
         </section>
 
-        <section className="grid gap-12 lg:grid-cols-[12rem_1fr]">
-          <header className="lg:sticky lg:top-32 lg:self-start">
-            <div className="text-xs uppercase tracking-[0.22em] text-muted-foreground">{text.chapter2}</div>
-            <div className="mt-1 text-xs font-medium text-foreground/70">{text.section2Eyebrow}</div>
-          </header>
-          <div className="max-w-4xl">
-            <h2 className="text-3xl font-semibold leading-tight tracking-tight md:text-[2.5rem]">
-              {text.section2Title}
+        <section className="relative border-t border-foreground/[0.07] px-4 py-28 text-center sm:px-6 lg:px-8">
+          <div className="mx-auto max-w-4xl">
+            <h2 className="text-balance text-4xl font-semibold leading-[0.98] tracking-[-0.06em] text-[color:var(--site-strong)] md:text-6xl">
+              {text.finalTitle}
             </h2>
-            <ol className="mt-10 flex flex-col gap-10">
-              {text.builds.map((b, i) => (
-                <li key={b.t} className="grid gap-x-6 sm:grid-cols-[3rem_1fr]">
-                  <span className="font-mono text-3xl text-muted-foreground/70 tabular-nums">
-                    {String(i + 1).padStart(2, "0")}
-                  </span>
-                  <div>
-                    <h3 className="text-xl font-semibold tracking-tight">{b.t}</h3>
-                    <p className="mt-2 max-w-3xl text-base leading-7 text-muted-foreground">{b.d}</p>
-                  </div>
-                </li>
-              ))}
-            </ol>
-          </div>
-        </section>
-
-        <section className="grid gap-12 lg:grid-cols-[12rem_1fr]">
-          <header className="lg:sticky lg:top-32 lg:self-start">
-            <div className="text-xs uppercase tracking-[0.22em] text-muted-foreground">{text.chapter3}</div>
-            <div className="mt-1 text-xs font-medium text-foreground/70">{text.section3Eyebrow}</div>
-          </header>
-          <div className="max-w-4xl">
-            <h2 className="text-3xl font-semibold leading-tight tracking-tight md:text-[2.5rem]">
-              {text.section3Title}
-            </h2>
-            <p className="mt-4 max-w-3xl text-base leading-7 text-muted-foreground">{text.section3Lede}</p>
-
-            <ol className="mt-10 flex flex-col">
-              {lessons.map((lesson, index) => (
-                <li key={lesson.slug}>
-                  <Link
-                    href={lesson.status === "ready" ? `/${locale}/learn/${lesson.slug}` : `/${locale}`}
-                    className="group grid grid-cols-[3rem_1fr_auto] items-baseline gap-x-6 gap-y-1 border-t border-dashed border-foreground/20 dark:border-foreground/25 py-6 transition-colors first:border-t-0 first:pt-0 hover:text-foreground"
-                  >
-                    <span className="font-mono text-sm text-muted-foreground tabular-nums">
-                      {String(index + 1).padStart(2, "0")}
-                    </span>
-                    <div>
-                      <h3 className="text-lg font-semibold tracking-tight">
-                        {lesson.title[locale]}
-                      </h3>
-                      <p className="mt-1 max-w-2xl text-sm leading-7 text-muted-foreground">
-                        {lesson.summary[locale]}
-                      </p>
-                    </div>
-                    <span
-                      className={`text-xs ${
-                        lesson.status === "ready"
-                          ? "text-foreground/80"
-                          : "italic text-muted-foreground/70"
-                      }`}
-                    >
-                      {lesson.status === "ready" ? `${lesson.minutes} min` : "soon"}
-                    </span>
-                  </Link>
-                </li>
-              ))}
-            </ol>
-          </div>
-        </section>
-
-        <section className="grid gap-12 lg:grid-cols-[12rem_1fr]">
-          <header className="lg:sticky lg:top-32 lg:self-start">
-            <div className="text-xs uppercase tracking-[0.22em] text-muted-foreground">{text.chapter4}</div>
-            <div className="mt-1 text-xs font-medium text-foreground/70">{text.section4Eyebrow}</div>
-          </header>
-          <div className="max-w-4xl">
-            <h2 className="text-3xl font-semibold leading-tight tracking-tight md:text-[2.5rem]">
-              {text.section4Title}
-            </h2>
-            <div className="mt-10 flex flex-col">
-              {text.safety.map((s, i) => (
-                <div
-                  key={s.lead}
-                  className="grid gap-x-6 border-t border-dashed border-foreground/20 dark:border-foreground/25 py-6 first:border-t-0 first:pt-0 sm:grid-cols-[3rem_1fr]"
-                >
-                  <span className="font-mono text-xs uppercase tracking-[0.18em] text-muted-foreground">
-                    rule {String(i + 1).padStart(2, "0")}
-                  </span>
-                  <p className="max-w-3xl text-base leading-7">
-                    <span className="font-semibold text-foreground">{s.lead}</span>{" "}
-                    <span className="text-muted-foreground">{s.rest}</span>
-                  </p>
-                </div>
-              ))}
-            </div>
-
-            <blockquote className="mt-14 max-w-2xl border-s-2 border-[color:var(--chart-4)] ps-6">
-              <p className="text-2xl font-medium leading-snug tracking-tight text-foreground">
-                &ldquo;{text.pullQuote}&rdquo;
-              </p>
-              <footer className="mt-3 text-xs uppercase tracking-[0.22em] text-muted-foreground">
-                {text.pullQuoteAttribution}
-              </footer>
-            </blockquote>
-          </div>
-        </section>
-
-        <section className="grid gap-12 lg:grid-cols-[12rem_1fr]">
-          <header className="lg:sticky lg:top-32 lg:self-start">
-            <div className="text-xs uppercase tracking-[0.22em] text-muted-foreground">{text.chapter5}</div>
-            <div className="mt-1 text-xs font-medium text-foreground/70">{text.section5Eyebrow}</div>
-          </header>
-          <div className="max-w-4xl">
-            <h2 className="text-3xl font-semibold leading-tight tracking-tight md:text-[2.5rem]">
-              {text.section5Title}
-            </h2>
-            <div className="mt-10 flex flex-col">
-              {text.faqs.map((f) => (
-                <details
-                  key={f.q}
-                  className="group border-t border-dashed border-foreground/20 dark:border-foreground/25 py-5 first:border-t-0 first:pt-0"
-                >
-                  <summary className="flex cursor-pointer list-none items-center justify-between gap-4 text-lg font-medium tracking-tight [&::-webkit-details-marker]:hidden">
-                    <span>{f.q}</span>
-                    <span className="text-muted-foreground transition-transform group-open:rotate-45 text-2xl leading-none font-light">
-                      +
-                    </span>
-                  </summary>
-                  <p className="mt-3 max-w-3xl text-base leading-7 text-muted-foreground">{f.a}</p>
-                </details>
-              ))}
-            </div>
+            <p className="mx-auto mt-5 max-w-2xl text-pretty text-base leading-7 text-[color:var(--site-muted)]">
+              {text.finalLead}
+            </p>
+            <Button
+              render={<Link href={`/${locale}/learn/welcome`} />}
+              nativeButton={false}
+              size="lg"
+              className="mt-8 h-11 rounded-xl bg-[color:var(--site-strong)] px-4 text-[color:var(--site-bg)] hover:bg-[color:var(--site-accent)]"
+            >
+              {text.finalCta}
+              <ArrowRight data-icon="inline-end" />
+            </Button>
           </div>
         </section>
       </article>
