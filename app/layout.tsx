@@ -17,6 +17,26 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://ai-seminar-may26.vercel.app"),
   title: "AI Seminar",
   description: "A bilingual workshop guide for getting started with AI agents.",
+  openGraph: {
+    title: "AI Seminar",
+    description: "A bilingual workshop guide for getting started with AI agents.",
+    siteName: "AI Seminar",
+    type: "website",
+    images: [
+      {
+        url: "/opengraph-image",
+        width: 1200,
+        height: 630,
+        alt: "AI Seminar 2026 - Bilingual Workshop Guide",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "AI Seminar",
+    description: "A bilingual workshop guide for getting started with AI agents.",
+    images: ["/twitter-image"],
+  },
   icons: {
     icon: "/icon.svg",
     apple: "/icon.svg",

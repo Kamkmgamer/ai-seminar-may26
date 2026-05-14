@@ -1,35 +1,25 @@
 import { MetadataRoute } from "next";
-import { locales, lessons, readyLessons } from "@/lib/course";
+import { locales, readyLessons } from "@/lib/course";
 
 const BASE_URL = "https://ai-seminar-may26.vercel.app";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const staticPaths = [
-    "",
-    "/en",
-    "/ar",
-    "/en/agents",
-    "/ar/agents",
-    "/en/references",
-    "/ar/references",
-    "/en/leaderboard",
-    "/ar/leaderboard",
-    "/en/profile",
-    "/ar/profile",
-    "/en/admin",
-    "/ar/admin",
-  ];
-
   const sitemapEntries: MetadataRoute.Sitemap = [];
 
+  sitemapEntries.push({
+    url: BASE_URL,
+    lastModified: new Date(),
+    changeFrequency: "weekly",
+    priority: 1,
+  });
+
   for (const locale of locales) {
-    for (const path of staticPaths) {
-      const url = `${BASE_URL}/${locale}${path}`;
+    for (const path of ["", "/agents", "/references", "/leaderboard", "/profile"]) {
       sitemapEntries.push({
-        url,
+        url: `${BASE_URL}/${locale}${path}`,
         lastModified: new Date(),
         changeFrequency: "weekly",
-        priority: path === "" ? 1 : 0.8,
+        priority: path === "" ? 0.9 : 0.8,
       });
     }
   }
