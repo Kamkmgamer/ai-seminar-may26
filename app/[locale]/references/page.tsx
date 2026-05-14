@@ -28,8 +28,7 @@ const copy = {
     back: "Back to course",
     catalog: "Agent catalog",
     noteTitle: "Reference rule",
-    note:
-      "Do not copy commands from random posts during the workshop. Open the official page, check the date or product version, then run only what you understand.",
+    note: "Do not copy commands from random posts during the workshop. Open the official page, check the date or product version, then run only what you understand.",
   },
   ar: {
     badge: "مراجع رسمية",
@@ -39,8 +38,7 @@ const copy = {
     back: "ارجع للكورس",
     catalog: "كتالوج الوكلاء",
     noteTitle: "قاعدة المراجع",
-    note:
-      "ما تنسخ أوامر من بوستات عشوائية أثناء الورشة. افتح الصفحة الرسمية، راجع التاريخ أو نسخة المنتج، وشغل فقط الأمر الفاهمه.",
+    note: "ما تنسخ أوامر من بوستات عشوائية أثناء الورشة. افتح الصفحة الرسمية، راجع التاريخ أو نسخة المنتج، وشغل فقط الأمر الفاهمه.",
   },
 } satisfies Record<Locale, Record<string, string>>;
 
@@ -54,27 +52,42 @@ const setupReferences: ReferenceGroup = {
     {
       label: "Node.js downloads",
       href: "https://nodejs.org/en/download",
-      note: { en: "Use the current LTS installer.", ar: "استخدم مثبت LTS الحالي." },
+      note: {
+        en: "Use the current LTS installer.",
+        ar: "استخدم مثبت LTS الحالي.",
+      },
     },
     {
       label: "Node.js docs",
       href: "https://nodejs.org/docs/latest/api/",
-      note: { en: "Runtime reference for later study.", ar: "مرجع بيئة التشغيل للدراسة لاحقاً." },
+      note: {
+        en: "Runtime reference for later study.",
+        ar: "مرجع بيئة التشغيل للدراسة لاحقاً.",
+      },
     },
     {
       label: "npm docs",
       href: "https://docs.npmjs.com/",
-      note: { en: "Package-manager commands and concepts.", ar: "أوامر ومفاهيم مدير الحزم." },
+      note: {
+        en: "Package-manager commands and concepts.",
+        ar: "أوامر ومفاهيم مدير الحزم.",
+      },
     },
     {
       label: "Windows Terminal",
       href: "https://learn.microsoft.com/windows/terminal/",
-      note: { en: "Terminal setup and profile reference.", ar: "مرجع إعداد التيرمنال والبروفايلات." },
+      note: {
+        en: "Terminal setup and profile reference.",
+        ar: "مرجع إعداد التيرمنال والبروفايلات.",
+      },
     },
     {
       label: "PowerShell docs",
       href: "https://learn.microsoft.com/powershell/",
-      note: { en: "Windows shell behavior and commands.", ar: "سلوك وأوامر shell في ويندوز." },
+      note: {
+        en: "Windows shell behavior and commands.",
+        ar: "سلوك وأوامر shell في ويندوز.",
+      },
     },
   ],
 };
@@ -94,17 +107,26 @@ const publishingReferences: ReferenceGroup = {
     {
       label: "GitHub account guide",
       href: "https://docs.github.com/en/get-started/start-your-journey/creating-an-account-on-github",
-      note: { en: "Official account creation steps.", ar: "خطوات إنشاء الحساب الرسمية." },
+      note: {
+        en: "Official account creation steps.",
+        ar: "خطوات إنشاء الحساب الرسمية.",
+      },
     },
     {
       label: "GitHub two-factor authentication",
       href: "https://docs.github.com/en/authentication/securing-your-account-with-two-factor-authentication-2fa/configuring-two-factor-authentication",
-      note: { en: "Protect the account before publishing.", ar: "احم الحساب قبل النشر." },
+      note: {
+        en: "Protect the account before publishing.",
+        ar: "احم الحساب قبل النشر.",
+      },
     },
     {
       label: "Vercel Git deployments",
       href: "https://vercel.com/docs/git",
-      note: { en: "Recommended path for Next.js projects.", ar: "المسار المفضل لمشاريع Next.js." },
+      note: {
+        en: "Recommended path for Next.js projects.",
+        ar: "المسار المفضل لمشاريع Next.js.",
+      },
     },
     {
       label: "Netlify docs",
@@ -114,14 +136,19 @@ const publishingReferences: ReferenceGroup = {
     {
       label: "GitHub Pages docs",
       href: "https://docs.github.com/en/pages",
-      note: { en: "Only for static-compatible projects.", ar: "فقط للمشاريع المناسبة للنشر الثابت." },
+      note: {
+        en: "Only for static-compatible projects.",
+        ar: "فقط للمشاريع المناسبة للنشر الثابت.",
+      },
     },
   ],
 };
 
 function getReferenceGroups(): ReferenceGroup[] {
   const verifiedAgents = agentCatalog
-    .filter((agent) => agent.sourceStatus === "official" && agent.officialUrl !== "#")
+    .filter(
+      (agent) => agent.sourceStatus === "official" && agent.officialUrl !== "#",
+    )
     .map((agent) => ({
       label: agent.name,
       href: agent.officialUrl,
@@ -196,7 +223,9 @@ export default async function ReferencesPage({
             <p className="text-xs font-medium uppercase tracking-[0.18em] text-muted-foreground">
               {text.noteTitle}
             </p>
-            <p className="mt-3 text-sm leading-6 text-foreground/85">{text.note}</p>
+            <p className="mt-3 text-sm leading-6 text-foreground/85">
+              {text.note}
+            </p>
           </aside>
         </header>
 
@@ -229,7 +258,7 @@ export default async function ReferencesPage({
                         href={reference.href}
                         target="_blank"
                         rel="noreferrer noopener"
-                        className="text-base font-medium underline decoration-[color:var(--chart-4)] decoration-2 underline-offset-[5px] hover:text-[color:var(--chart-4)]"
+                        className="text-base font-medium underline decoration-color(--chart-4) decoration-2 underline-offset-[5px] hover:text-chart-4"
                       >
                         {reference.label} ↗
                       </a>

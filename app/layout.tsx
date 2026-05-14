@@ -14,6 +14,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://ai-seminar-may26.vercel.app"),
   title: "AI Seminar",
   description: "A bilingual workshop guide for getting started with AI agents.",
   icons: {
