@@ -80,7 +80,6 @@ const tools: Tool[] = [
 
 const copy = {
   en: {
-    badge: "Live workshop · 26 May 2026",
     heroKicker: "AI literacy for students",
     title: "Your practical control room for AI in 2026.",
     intro:
@@ -408,11 +407,7 @@ export default async function LocaleHome({
         <section className="hero-section relative min-h-[calc(100svh-5rem)] px-4 pb-20 pt-16 sm:px-6 lg:px-8">
           <HeroConstellation />
           <div className="relative z-1 mx-auto flex max-w-6xl flex-col items-center text-center">
-            <p className="inline-flex items-center gap-2 rounded-full border border-foreground/10 bg-foreground/[0.03] px-3 py-1 text-[11px] uppercase tracking-[0.22em] text-[color:var(--site-accent-2)]">
-              <span className="size-1.5 rounded-full bg-[color:var(--site-accent-2)]" />
-              {text.badge}
-            </p>
-            <p className="mt-8 text-sm font-medium text-[color:var(--site-muted)]">
+<p className="text-sm font-medium text-[color:var(--site-muted)]">
               {text.heroKicker}
             </p>
             <h1 className="mt-4 max-w-5xl text-balance text-[clamp(3.1rem,9vw,7.4rem)] font-semibold leading-[0.88] tracking-[-0.075em] text-[color:var(--site-strong)]">
