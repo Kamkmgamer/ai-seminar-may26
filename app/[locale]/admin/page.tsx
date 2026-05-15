@@ -36,6 +36,7 @@ const copy = {
     searchButton: "Search",
     clearSearch: "Clear",
     noStudents: "No students match this search.",
+    exportCsv: "Export CSV",
   },
   ar: {
     badge: "لوحة المدرب",
@@ -56,6 +57,7 @@ const copy = {
     searchButton: "بحث",
     clearSearch: "مسح",
     noStudents: "لا يوجد طلاب مطابقون لهذا البحث.",
+    exportCsv: "تصدير CSV",
   },
 } satisfies Record<Locale, Record<string, string>>;
 
@@ -194,32 +196,40 @@ export default async function AdminPage({
         <section className="grid gap-5">
           <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
             <h2 className="text-2xl font-semibold tracking-tight">{text.students}</h2>
-            <form className="flex w-full flex-col gap-2 md:w-auto md:min-w-96 md:flex-row" action={`/${locale}/admin`}>
-              <label className="sr-only" htmlFor="admin-student-search">
-                {text.search}
-              </label>
-              <input
-                id="admin-student-search"
-                name="q"
-                defaultValue={searchQuery}
-                placeholder={text.searchPlaceholder}
-                className="h-10 rounded-md border bg-background px-3 text-sm outline-none focus-visible:ring-3 focus-visible:ring-ring/50 md:flex-1"
-              />
-              <button
-                type="submit"
-                className="h-10 rounded-md border px-3 text-sm font-medium transition-colors hover:bg-muted"
+            <div className="flex w-full flex-col gap-2 md:w-auto md:flex-row">
+              <a
+                href={`/${locale}/admin/export`}
+                className="inline-flex h-10 items-center justify-center rounded-md border px-3 text-sm font-medium transition-colors hover:bg-muted"
               >
-                {text.searchButton}
-              </button>
-              {searchQuery ? (
-                <a
-                  href={`/${locale}/admin`}
-                  className="inline-flex h-10 items-center justify-center rounded-md border px-3 text-sm font-medium text-muted-foreground transition-colors hover:bg-muted"
+                {text.exportCsv}
+              </a>
+              <form className="flex w-full flex-col gap-2 md:w-auto md:min-w-96 md:flex-row" action={`/${locale}/admin`}>
+                <label className="sr-only" htmlFor="admin-student-search">
+                  {text.search}
+                </label>
+                <input
+                  id="admin-student-search"
+                  name="q"
+                  defaultValue={searchQuery}
+                  placeholder={text.searchPlaceholder}
+                  className="h-10 rounded-md border bg-background px-3 text-sm outline-none focus-visible:ring-3 focus-visible:ring-ring/50 md:flex-1"
+                />
+                <button
+                  type="submit"
+                  className="h-10 rounded-md border px-3 text-sm font-medium transition-colors hover:bg-muted"
                 >
-                  {text.clearSearch}
-                </a>
-              ) : null}
-            </form>
+                  {text.searchButton}
+                </button>
+                {searchQuery ? (
+                  <a
+                    href={`/${locale}/admin`}
+                    className="inline-flex h-10 items-center justify-center rounded-md border px-3 text-sm font-medium text-muted-foreground transition-colors hover:bg-muted"
+                  >
+                    {text.clearSearch}
+                  </a>
+                ) : null}
+              </form>
+            </div>
           </div>
           <div className="overflow-x-auto border-t border-dashed border-foreground/20">
             <table className="w-full min-w-[42rem] text-sm">
