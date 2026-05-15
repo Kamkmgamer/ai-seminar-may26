@@ -31,6 +31,11 @@ const copy = {
     reset: "Reset progress",
     resetConfirm: "Type RESET",
     badges: "Badges",
+    search: "Search students",
+    searchPlaceholder: "Nickname, email, or project URL",
+    searchButton: "Search",
+    clearSearch: "Clear",
+    noStudents: "No students match this search.",
   },
   ar: {
     badge: "لوحة المدرب",
@@ -46,6 +51,11 @@ const copy = {
     reset: "صفّر التقدم",
     resetConfirm: "اكتب RESET",
     badges: "الشارات",
+    search: "ابحث عن الطلاب",
+    searchPlaceholder: "الاسم، الإيميل، أو رابط المشروع",
+    searchButton: "بحث",
+    clearSearch: "مسح",
+    noStudents: "لا يوجد طلاب مطابقون لهذا البحث.",
   },
 } satisfies Record<Locale, Record<string, string>>;
 
@@ -53,15 +63,20 @@ export const dynamic = "force-dynamic";
 
 export default async function AdminPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ locale: string }>;
+  searchParams: Promise<{ q?: string }>;
 }) {
   const { locale } = await params;
+  const { q } = await searchParams;
   if (!isLocale(locale)) notFound();
 
   await auth.protect();
   const text = copy[locale];
   const isAdmin = await isCurrentUserAdmin();
+  const searchQuery = typeof q === "string" ? q.trim() : "";
+  const normalizedSearchQuery = searchQuery.toLowerCase();
 
   if (!isAdmin) {
     return (
@@ -106,8 +121,8 @@ export default async function AdminPage({
     { label: text.links, value: linkCount?.value ?? 0 },
   ];
 
-  const studentProfiles = await db.select().from(profiles).limit(50);
-  const studentRows = await Promise.all(
+  const studentProfiles = await db.select().from(profiles).limit(100);
+  const allStudentRows = await Promise.all(
     studentProfiles.map(async (profile) => {
       const [[completed], [completedChecklist], links] = await Promise.all([
         db
@@ -139,6 +154,20 @@ export default async function AdminPage({
       };
     }),
   );
+  const studentRows = normalizedSearchQuery
+    ? allStudentRows.filter((row) => {
+        const searchableText = [
+          row.profile.nickname,
+          row.profile.email,
+          ...row.links.map((link) => link.url),
+        ]
+          .filter(Boolean)
+          .join(" ")
+          .toLowerCase();
+
+        return searchableText.includes(normalizedSearchQuery);
+      })
+    : allStudentRows;
 
   return (
     <CourseShell locale={locale}>
@@ -163,7 +192,35 @@ export default async function AdminPage({
         </section>
 
         <section className="grid gap-5">
-          <h2 className="text-2xl font-semibold tracking-tight">{text.students}</h2>
+          <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+            <h2 className="text-2xl font-semibold tracking-tight">{text.students}</h2>
+            <form className="flex w-full flex-col gap-2 md:w-auto md:min-w-96 md:flex-row" action={`/${locale}/admin`}>
+              <label className="sr-only" htmlFor="admin-student-search">
+                {text.search}
+              </label>
+              <input
+                id="admin-student-search"
+                name="q"
+                defaultValue={searchQuery}
+                placeholder={text.searchPlaceholder}
+                className="h-10 rounded-md border bg-background px-3 text-sm outline-none focus-visible:ring-3 focus-visible:ring-ring/50 md:flex-1"
+              />
+              <button
+                type="submit"
+                className="h-10 rounded-md border px-3 text-sm font-medium transition-colors hover:bg-muted"
+              >
+                {text.searchButton}
+              </button>
+              {searchQuery ? (
+                <a
+                  href={`/${locale}/admin`}
+                  className="inline-flex h-10 items-center justify-center rounded-md border px-3 text-sm font-medium text-muted-foreground transition-colors hover:bg-muted"
+                >
+                  {text.clearSearch}
+                </a>
+              ) : null}
+            </form>
+          </div>
           <div className="overflow-x-auto border-t border-dashed border-foreground/20">
             <table className="w-full min-w-[42rem] text-sm">
               <thead className="text-start text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
@@ -177,6 +234,13 @@ export default async function AdminPage({
                 </tr>
               </thead>
               <tbody>
+                {studentRows.length === 0 ? (
+                  <tr>
+                    <td className="py-8 text-muted-foreground" colSpan={6}>
+                      {text.noStudents}
+                    </td>
+                  </tr>
+                ) : null}
                 {studentRows.map((row) => (
                   <tr key={row.profile.id} className="border-b border-dashed border-foreground/15">
                     <td className="py-4 font-medium">
