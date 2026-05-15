@@ -2,7 +2,7 @@ import { auth } from "@clerk/nextjs/server";
 import { and, count, eq } from "drizzle-orm";
 
 import { checklistProgress, lessonProgress, profiles, projectLinks } from "@/db/schema";
-import { getAdminEmailAllowlist, isCurrentUserAdmin } from "@/lib/admin";
+import { isCurrentUserAdmin } from "@/lib/admin";
 import { isLocale, type Locale } from "@/lib/course";
 import { getDb } from "@/lib/db";
 import { getMilestoneBadges } from "@/lib/milestones";
@@ -36,7 +36,7 @@ export async function GET(
     return new Response("Forbidden", { status: 403 });
   }
 
-  if (!process.env.DATABASE_URL || getAdminEmailAllowlist().length === 0) {
+  if (!process.env.DATABASE_URL) {
     return new Response("Admin analytics are not configured.", { status: 503 });
   }
 

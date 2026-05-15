@@ -129,6 +129,17 @@ export const courseEvents = pgTable(
   ],
 );
 
+export const adminEmails = pgTable(
+  "admin_emails",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    email: text("email").notNull(),
+    createdByEmail: text("created_by_email"),
+    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (table) => [uniqueIndex("admin_emails_email_idx").on(table.email)],
+);
+
 export const profilesRelations = relations(profiles, ({ many }) => ({
   lessonProgress: many(lessonProgress),
   checklistProgress: many(checklistProgress),

@@ -8,6 +8,13 @@
       "when": 1778626639660,
       "tag": "0000_curved_venom",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1778875603358,
+      "tag": "0001_windy_boom_boom",
+      "breakpoints": true
     }
   ]
 }

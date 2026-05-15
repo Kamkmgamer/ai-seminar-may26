@@ -2,8 +2,10 @@ import { auth } from "@clerk/nextjs/server";
 import { and, count, eq } from "drizzle-orm";
 import { notFound } from "next/navigation";
 
+import { addAdminEmailAction, removeAdminEmailAction } from "@/app/actions/admin";
 import { resetStudentProgressAction } from "@/app/actions/progress";
 import {
+  adminEmails,
   checklistProgress,
   lessonProgress,
   profiles,
@@ -20,8 +22,8 @@ const copy = {
   en: {
     badge: "Admin overview",
     title: "Instructor snapshot.",
-    denied: "Admin access is restricted to the configured email allowlist.",
-    setup: "Set ADMIN_EMAIL_ALLOWLIST and DATABASE_URL to enable live admin analytics.",
+    denied: "Admin access is restricted to configured admin emails.",
+    setup: "Set DATABASE_URL to enable live admin analytics.",
     profiles: "Profiles",
     lessons: "Completed lessons",
     checklist: "Checklist items",
@@ -37,12 +39,19 @@ const copy = {
     clearSearch: "Clear",
     noStudents: "No students match this search.",
     exportCsv: "Export CSV",
+    admins: "Admins",
+    adminEmail: "Admin email",
+    addAdmin: "Add admin",
+    removeAdmin: "Remove",
+    envAdmins: "Bootstrap admins from ADMIN_EMAIL_ALLOWLIST",
+    dbAdmins: "Database admins",
+    noDbAdmins: "No database admins yet.",
   },
   ar: {
     badge: "لوحة المدرب",
     title: "ملخص سريع للمدرب.",
-    denied: "دخول الإدارة محدود للإيميلات الموجودة في allowlist.",
-    setup: "اضبط ADMIN_EMAIL_ALLOWLIST و DATABASE_URL لتفعيل analytics الحية.",
+    denied: "دخول الإدارة محدود للإيميلات الإدارية المفعلة.",
+    setup: "اضبط DATABASE_URL لتفعيل analytics الحية.",
     profiles: "البروفايلات",
     lessons: "الدروس المكتملة",
     checklist: "عناصر checklist",
@@ -58,6 +67,13 @@ const copy = {
     clearSearch: "مسح",
     noStudents: "لا يوجد طلاب مطابقون لهذا البحث.",
     exportCsv: "تصدير CSV",
+    admins: "المدراء",
+    adminEmail: "إيميل المدير",
+    addAdmin: "إضافة مدير",
+    removeAdmin: "حذف",
+    envAdmins: "مدراء bootstrap من ADMIN_EMAIL_ALLOWLIST",
+    dbAdmins: "مدراء قاعدة البيانات",
+    noDbAdmins: "لا يوجد مدراء في قاعدة البيانات بعد.",
   },
 } satisfies Record<Locale, Record<string, string>>;
 
@@ -91,7 +107,7 @@ export default async function AdminPage({
     );
   }
 
-  if (!process.env.DATABASE_URL || getAdminEmailAllowlist().length === 0) {
+  if (!process.env.DATABASE_URL) {
     return (
       <CourseShell locale={locale}>
         <section className="max-w-3xl rounded-[2rem] border border-dashed bg-card/60 p-8">
@@ -122,6 +138,10 @@ export default async function AdminPage({
     { label: text.checklist, value: checklistCount?.value ?? 0 },
     { label: text.links, value: linkCount?.value ?? 0 },
   ];
+  const [dbAdminEmails, envAdminEmails] = await Promise.all([
+    db.select().from(adminEmails).orderBy(adminEmails.email),
+    Promise.resolve(getAdminEmailAllowlist()),
+  ]);
 
   const studentProfiles = await db.select().from(profiles).limit(100);
   const allStudentRows = await Promise.all(
@@ -191,6 +211,77 @@ export default async function AdminPage({
               </p>
             </div>
           ))}
+        </section>
+
+        <section className="grid gap-5 rounded-[2rem] border bg-card/60 p-6">
+          <div className="flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
+            <div>
+              <h2 className="text-2xl font-semibold tracking-tight">{text.admins}</h2>
+              <p className="mt-1 text-sm text-muted-foreground">{text.dbAdmins}</p>
+            </div>
+            <form action={addAdminEmailAction} className="flex w-full flex-col gap-2 md:w-auto md:min-w-96 md:flex-row">
+              <input type="hidden" name="locale" value={locale} />
+              <label className="sr-only" htmlFor="admin-email">
+                {text.adminEmail}
+              </label>
+              <input
+                id="admin-email"
+                name="email"
+                type="email"
+                placeholder="admin@example.com"
+                className="h-10 rounded-md border bg-background px-3 text-sm outline-none focus-visible:ring-3 focus-visible:ring-ring/50 md:flex-1"
+                required
+              />
+              <button
+                type="submit"
+                className="h-10 rounded-md border px-3 text-sm font-medium transition-colors hover:bg-muted"
+              >
+                {text.addAdmin}
+              </button>
+            </form>
+          </div>
+
+          <div className="grid gap-3 md:grid-cols-2">
+            <div className="rounded-2xl border border-dashed p-4">
+              <p className="text-xs uppercase tracking-[0.18em] text-muted-foreground">
+                {text.envAdmins}
+              </p>
+              <div className="mt-3 flex flex-wrap gap-2">
+                {envAdminEmails.map((email) => (
+                  <span key={email} className="rounded-full border px-3 py-1 text-xs">
+                    {email}
+                  </span>
+                ))}
+              </div>
+            </div>
+            <div className="rounded-2xl border border-dashed p-4">
+              <p className="text-xs uppercase tracking-[0.18em] text-muted-foreground">
+                {text.dbAdmins}
+              </p>
+              <div className="mt-3 grid gap-2">
+                {dbAdminEmails.length === 0 ? (
+                  <p className="text-sm text-muted-foreground">{text.noDbAdmins}</p>
+                ) : null}
+                {dbAdminEmails.map((adminEmail) => (
+                  <form
+                    key={adminEmail.id}
+                    action={removeAdminEmailAction}
+                    className="flex items-center justify-between gap-3 rounded-xl border bg-background/60 px-3 py-2"
+                  >
+                    <input type="hidden" name="locale" value={locale} />
+                    <input type="hidden" name="id" value={adminEmail.id} />
+                    <span className="truncate text-sm">{adminEmail.email}</span>
+                    <button
+                      type="submit"
+                      className="rounded-md border px-2 py-1 text-xs font-medium text-muted-foreground transition-colors hover:bg-destructive/10 hover:text-destructive"
+                    >
+                      {text.removeAdmin}
+                    </button>
+                  </form>
+                ))}
+              </div>
+            </div>
+          </div>
         </section>
 
         <section className="grid gap-5">
